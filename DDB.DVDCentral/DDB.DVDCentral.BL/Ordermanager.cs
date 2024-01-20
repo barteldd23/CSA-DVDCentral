@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace DDB.DVDCentral.BL
 {
@@ -41,7 +42,7 @@ namespace DDB.DVDCentral.BL
                         for (int i = 0; i < order.OrderItems.Count; i++)
                         {
                             order.OrderItems[i].OrderId = order.Id;
-                            OrderItemManager.Insert(order.OrderItems[i]);
+                            OrderItemManager.Insert(order.OrderItems[i], rollback);
 
 
                             //entity2 = new tblOrderItem();
@@ -205,9 +206,11 @@ namespace DDB.DVDCentral.BL
         public static List<Order> Load(int? customerId = null)
         {
             List<Order> list = new List<Order>();
+            List<Order> orders = new List<Order>();
 
             using (DVDCentralEntities dc = new DVDCentralEntities())
             {
+
                 (from e in dc.tblOrders
                  join u in dc.tblUsers on e.UserId equals u.Id
                  join c in dc.tblCustomers on e.CustomerId equals c.Id
@@ -223,18 +226,18 @@ namespace DDB.DVDCentral.BL
                      LastName = c.LastName,
                      UserName = u.UserName
                  }).Distinct().ToList()
-                 .ForEach( order => list.Add(new Order
+                 .ForEach(order => list.Add(new Order
                  {
                      Id = order.Id,
                      CustomerId = order.CustomerId,
-                     OrderDate =order.OrderDate,
+                     OrderDate = order.OrderDate,
                      UserId = order.UserId,
                      ShipDate = order.ShipDate,
                      FirstName = order.FirstName,
                      LastName = order.LastName,
                      UserName = order.UserName,
                      OrderItems = OrderItemManager.LoadByOrderId(order.Id)
-             
+
                  }));
             }
             return list;
