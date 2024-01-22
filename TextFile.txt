@@ -15,3 +15,7 @@ Microsoft.EntityFrameworkCore.SqlServer -Context DVDCentralEntities -UseDatabase
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" asp-append-version="true" />
+
+~~~Migration first aka Code First scaffolding:
+Add-Migration CreateDatabase
+Update-Database

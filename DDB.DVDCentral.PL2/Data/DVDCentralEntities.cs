@@ -44,8 +44,8 @@ namespace DDB.DVDCentral.PL2.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           // optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DDB.DVDCentral.DB;Integrated Security=True");
-           // optionsBuilder.UseLazyLoadingProxies();
+           optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DDB.DVDCentral.DB;Integrated Security=True");
+           optionsBuilder.UseLazyLoadingProxies();
         }
 
         public DVDCentralEntities()
