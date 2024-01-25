@@ -1,10 +1,9 @@
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
+using System.Net.Http;
 
-namespace DDB.DVDCentral.PL.Test
+namespace DDB.DVDCentral.PL2.Test
 {
     public enum DataTypes
     {
@@ -18,72 +17,6 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utTableStructure
     {
-        const string connstrlocal = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=DDB.DVDCentral.DB;Integrated Security=True";
-
-
-        public int GetRowCount<T>(DbContext context)
-        {
-            // Get the generic type definition
-            var method = typeof(DbContext).GetMethod(
-                nameof(DbContext.Set), BindingFlags.Public | BindingFlags.Instance);
-
-            // Build a method with the specific type argument you're interested in
-            method = method.MakeGenericMethod(typeof(T));
-
-            var iEnumerable = method.Invoke(context, null) as IQueryable<T>;
-
-            return (iEnumerable ?? throw new InvalidOperationException()).Count();
-        }
-
-        private bool CheckCounts(Type tableType,
-                                 ref string message,
-                                 ref string errmessage)
-        {
-            try
-            {
-
-                SqlConnection connection;
-                SqlCommand command;
-
-                connection = new SqlConnection();
-                connection.ConnectionString = connstrlocal;
-                connection.Open();
-
-                string ssql = "SELECT COUNT(*) FROM " + tableType.Name;
-                command = new SqlCommand(ssql, connection);
-
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                int rows = reader.GetInt32(0);
-                reader.Close();
-
-                if (rows > 0)
-                {
-                    message += "Passed: " + tableType.Name + ". Rows: " + rows + "\r\n";
-                    return true;
-                }
-                else
-                {
-                    errmessage += "Failed: Missing Rows: "
-                                   + tableType.Name
-                                   + ")\r\n";
-                    message += "Failed: Missing Rows: "
-                                   + tableType.Name
-                                   + ")\r\n";
-                    return false;
-                }
-
-
-            }
-            catch (System.Exception ex)
-            {
-                errmessage += "Failed: Get Count for " + tableType.Name + "\r\n";
-                message += "Failed: Get Count for " + tableType.Name + "\r\n";
-                return false;
-            }
-        }
-
-
 
         private bool CheckColumnDefinition(Type tableType,
                                           string columnName,
@@ -181,11 +114,13 @@ namespace DDB.DVDCentral.PL.Test
             {
                 Type myType = typeof(utTableStructure);
                 string[] namespaceNames = myType.Namespace.ToString().Split(".");
-                string namespaceName = namespaceNames[0] + "." + namespaceNames[1] + "." + namespaceNames[2]; // + "2.Entities";
+                string namespaceName = namespaceNames[0] + "." + namespaceNames[1] + "." + namespaceNames[2]; // + ".Entities";
 
-                string tableTypeName = structure1.Type.Replace("BDF", namespaceNames[0]).Split(",")[0];
+                string tableTypeName = structure1.Type.Replace("DDB", namespaceNames[0]).Split(",")[0];
 
                 Type tableType = Type.GetType(tableTypeName + ", " + namespaceName);
+                if (tableType == null)
+                    tableType = Type.GetType(tableTypeName + ", " + namespaceName);
 
                 foreach (ColumnInfo column in structure1.ColumnInfos)
                 {
@@ -196,8 +131,6 @@ namespace DDB.DVDCentral.PL.Test
                                                     ref message,
                                                     ref errMessage) ? results : false;
                 }
-                CheckCounts(tableType, ref message, ref errMessage);
-                message += "-----------------------------------\n";
             }
 
 
@@ -214,7 +147,7 @@ namespace DDB.DVDCentral.PL.Test
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri("https://fvtcdp.azurewebsites.net/api/");
-                HttpResponseMessage response = client.GetAsync("TableStructure/DVDCentralV1").Result;
+                HttpResponseMessage response = client.GetAsync("TableStructure/DVDCentralV2").Result;
                 string result = response.Content.ReadAsStringAsync().Result;
                 structures = JsonConvert.DeserializeObject<List<Structure>>(result);
                 //TestContext.Out.WriteLine(structures.Count + " structures found.");

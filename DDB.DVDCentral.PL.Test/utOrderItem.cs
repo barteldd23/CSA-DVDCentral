@@ -1,33 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utOrderItem
+    public class utOrderItem : utBase
     {
-        protected DVDCentralEntities dc;
-        protected IDbContextTransaction transaction;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            dc = new DVDCentralEntities();
-            transaction = dc.Database.BeginTransaction();
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            transaction.Rollback();
-            transaction.Dispose();
-            dc = null;
-        }
-
+       
         [TestMethod]
         public void LoadTest()
         {
@@ -38,11 +16,11 @@ namespace DDB.DVDCentral.PL.Test
         public void InsertTest()
         {
             tblOrderItem entity = new tblOrderItem();
-            entity.OrderId = 2;
-            entity.MovieId = 3;
+            entity.OrderId = dc.tblOrders.FirstOrDefault().Id;
+            entity.MovieId = dc.tblMovies.FirstOrDefault().Id;
             entity.Quantity = 4;
             entity.Cost = 9999.99;
-            entity.Id = -99;
+            entity.Id = Guid.NewGuid();
             dc.tblOrderItems.Add(entity);
             int results = dc.SaveChanges();
             Assert.AreEqual(1, results);
@@ -55,7 +33,7 @@ namespace DDB.DVDCentral.PL.Test
 
             if(entity != null)
             {
-                entity.OrderId = -99;
+                entity.Quantity = 99;
                 int results = dc.SaveChanges();
                 Assert.AreEqual(1, results);
             }

@@ -1,32 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utMovieGenre
+    public class utMovieGenre : utBase
     {
-        protected DVDCentralEntities dc;
-        protected IDbContextTransaction transaction;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            dc = new DVDCentralEntities();
-            transaction = dc.Database.BeginTransaction();
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            transaction.Rollback();
-            transaction.Dispose();
-            dc = null;
-        }
+        
 
         [TestMethod]
         public void LoadTest()
@@ -38,9 +17,9 @@ namespace DDB.DVDCentral.PL.Test
         public void InsertTest()
         {
             tblMovieGenre entity = new tblMovieGenre();
-            entity.MovieId = 2;
-            entity.GenreId = 1;
-            entity.Id = -99;
+            entity.MovieId = dc.tblMovies.FirstOrDefault().Id;
+            entity.GenreId = dc.tblGenres.FirstOrDefault().Id;
+            entity.Id = Guid.NewGuid();
             dc.tblMovieGenres.Add(entity);
             int results = dc.SaveChanges();
             Assert.AreEqual(1, results);
@@ -53,7 +32,7 @@ namespace DDB.DVDCentral.PL.Test
 
             if(entity != null)
             {
-                entity.GenreId = -99;
+                entity.MovieId = Guid.NewGuid();
                 int results = dc.SaveChanges();
                 Assert.AreEqual(1, results);
             }
