@@ -10,7 +10,7 @@ namespace DDB.DVDCentral.PL.Test
         [TestMethod]
         public void LoadTest()
         {
-            Assert.AreEqual(4, dc.tblMovieGenres.Count());
+            Assert.AreEqual(13, dc.tblMovieGenres.Count());
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@ namespace DDB.DVDCentral.PL.Test
 
             if(entity != null)
             {
-                entity.MovieId = Guid.NewGuid();
+                entity.Id = Guid.NewGuid();
                 int results = dc.SaveChanges();
                 Assert.AreEqual(1, results);
             }

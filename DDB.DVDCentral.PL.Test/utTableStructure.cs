@@ -116,7 +116,7 @@ namespace DDB.DVDCentral.PL2.Test
                 string[] namespaceNames = myType.Namespace.ToString().Split(".");
                 string namespaceName = namespaceNames[0] + "." + namespaceNames[1] + "." + namespaceNames[2]; // + ".Entities";
 
-                string tableTypeName = structure1.Type.Replace("DDB", namespaceNames[0]).Split(",")[0];
+                string tableTypeName = structure1.Type.Replace("BDF", namespaceNames[0]).Split(",")[0];
 
                 Type tableType = Type.GetType(tableTypeName + ", " + namespaceName);
                 if (tableType == null)

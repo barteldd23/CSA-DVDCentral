@@ -10,7 +10,7 @@ namespace DDB.DVDCentral.PL.Test
         public void LoadTest()
         {
             int results = dc.tblFormats.Count();
-            Assert.AreEqual(3, results);
+            Assert.AreEqual(4, results);
         }
 
         [TestMethod]

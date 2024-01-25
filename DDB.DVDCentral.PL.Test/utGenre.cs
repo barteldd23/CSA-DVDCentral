@@ -9,7 +9,7 @@ namespace DDB.DVDCentral.PL.Test
         public void LoadTest()
         {
             int results = dc.tblGenres.Count();
-            Assert.AreEqual(4, results);
+            Assert.AreEqual(10, results);
         }
 
         [TestMethod]

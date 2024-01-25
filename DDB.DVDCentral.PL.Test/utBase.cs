@@ -20,15 +20,16 @@ namespace DDB.DVDCentral.PL.Test
 
             _configuration = builder.Build();
             options = new DbContextOptionsBuilder<DVDCentralEntities>()
-                .UseSqlServer(_configuration.GetConnectionString("DVDCentralConnection"))
+                .UseSqlServer(_configuration.GetConnectionString("DatabaseConnection"))
                 .UseLazyLoadingProxies()
                 .Options;
+
+            dc = new DVDCentralEntities(options);
         }
 
         [TestInitialize]
         public void Initialize()
         {
-            dc = new DVDCentralEntities();
             transaction = dc.Database.BeginTransaction();
         }
 

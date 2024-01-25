@@ -10,7 +10,7 @@ namespace DDB.DVDCentral.PL.Test
         public void LoadTest()
         {
             int results = dc.tblMovies.Count();
-            Assert.AreEqual(3, results);
+            Assert.AreEqual(7, results);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace DDB.DVDCentral.PL.Test
                               DirectorFullName = d.FirstName + " " + d.LastName
                           }).ToList();
 
-            Assert.AreEqual(3, movies.Count);
+            Assert.AreEqual(7, movies.Count);
         }
 
         [TestMethod]
