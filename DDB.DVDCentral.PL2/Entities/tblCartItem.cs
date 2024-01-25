@@ -12,8 +12,8 @@ namespace DDB.DVDCentral.PL2.Entities
         public Guid CartId { get; set; }
         public Guid MovieId { get; set; }
         public int Quantity { get; set; }
-        public virtual tblCart Cart { get; set; } = new tblCart();
-        public virtual tblMovie Movie { get; set; } = new tblMovie();
+        public virtual tblCart Cart { get; set; }
+        public virtual tblMovie Movie { get; set; }
 
     }
 }

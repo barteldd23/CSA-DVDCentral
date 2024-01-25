@@ -10,6 +10,6 @@ namespace DDB.DVDCentral.PL2.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public virtual tblUser User { get; set; } = new tblUser();
+        public virtual tblUser User { get; set; }
     }
 }
