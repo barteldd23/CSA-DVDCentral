@@ -1,0 +1,27 @@
+﻿<Window x:Class="DDB.DVDCentral.WPFUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DDB.DVDCentral.WPFUI"
+        mc:Ignorable="d"
+        Title="DVDCentral" Height="550" Width="700">
+    <Grid x:Name="grdMovies" RenderTransformOrigin="0.704,0.44">
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF00FF84" Offset="0.738"/>
+                <GradientStop Color="#FF00E979" Offset="0.438"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+        <Button 
+            x:Name="btnExit"
+            Content="Exit" 
+                HorizontalAlignment="Left" 
+                Margin="505,122,0,0" 
+                VerticalAlignment="Top" 
+                Height="22" Width="74" 
+                Click="Button_Click"/>
+
+    </Grid>
+</Window>
