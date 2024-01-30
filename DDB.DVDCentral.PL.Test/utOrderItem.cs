@@ -3,7 +3,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utOrderItem : utBase
+    public class utOrderItem : utBase<tblOrderItem>
     {
        
         [TestMethod]
@@ -21,9 +21,9 @@ namespace DDB.DVDCentral.PL.Test
             entity.Quantity = 4;
             entity.Cost = 9999.99;
             entity.Id = Guid.NewGuid();
-            dc.tblOrderItems.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]

@@ -2,13 +2,13 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utRating : utBase
+    public class utRating : utBase<tblRating>
     {
         [TestMethod]
         public void LoadTest()
         {
-            int results = dc.tblRatings.Count();
-            Assert.AreEqual(5, results);
+            var results = base.LoadTest();
+            Assert.AreEqual(5, results.Count());
         }
 
         [TestMethod]
@@ -18,20 +18,19 @@ namespace DDB.DVDCentral.PL.Test
             entity.Description = "testUpdate";
             entity.Id = Guid.NewGuid();
 
-            dc.tblRatings.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblRating entity = dc.tblRatings.FirstOrDefault();
+            tblRating entity = base.LoadTest().FirstOrDefault();
 
             if (entity != null)
             {
                 entity.Description = "test";
-                int results = dc.SaveChanges();
+                int results = base.UpdateTest(entity);
                 Assert.AreEqual(1, results);
             }
         }
@@ -39,10 +38,9 @@ namespace DDB.DVDCentral.PL.Test
         [TestMethod]
         public void DeleteTest() 
         {
-            tblRating entity = dc.tblRatings.FirstOrDefault();
-            dc.tblRatings.Remove(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            tblRating row = base.LoadTest().FirstOrDefault(x => x.Description == "Other");
+            int results = base.DeleteTest(row);
+            Assert.IsTrue(results == 1);
         }
 
         //[TestMethod]

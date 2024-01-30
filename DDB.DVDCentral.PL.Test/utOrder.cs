@@ -2,7 +2,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utOrder : utBase
+    public class utOrder : utBase<tblOrder>
     {
         [TestMethod]
         public void LoadTest()
@@ -19,9 +19,9 @@ namespace DDB.DVDCentral.PL.Test
             entity.UserId = dc.tblCustomers.FirstOrDefault().UserId;
             entity.ShipDate = DateTime.Now;
             entity.Id = Guid.NewGuid();
-            dc.tblOrders.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]

@@ -3,7 +3,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utFormat : utBase
+    public class utFormat : utBase<tblFormat>
     {
 
         [TestMethod]
@@ -17,12 +17,11 @@ namespace DDB.DVDCentral.PL.Test
         public void InsertTest()
         {
             tblFormat entity = new tblFormat();
-            entity.Description = "test Update";
+            entity.Description = "testInsert";
             entity.Id = Guid.NewGuid();
 
-            dc.tblFormats.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
@@ -41,7 +40,7 @@ namespace DDB.DVDCentral.PL.Test
         [TestMethod]
         public void DeleteTest() 
         {
-            tblFormat entity = dc.tblFormats.FirstOrDefault();
+            tblFormat entity = dc.tblFormats.FirstOrDefault(x => x.Description == "Other");
             dc.tblFormats.Remove(entity);
             int results = dc.SaveChanges();
             Assert.AreEqual(1, results);

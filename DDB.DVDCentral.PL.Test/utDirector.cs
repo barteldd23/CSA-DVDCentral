@@ -2,7 +2,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utDirector : utBase
+    public class utDirector : utBase<tblDirector>
     {
 
 
@@ -17,13 +17,12 @@ namespace DDB.DVDCentral.PL.Test
         public void InsertTest()
         {
             tblDirector entity = new tblDirector();
-            entity.FirstName = "test FN";
-            entity.LastName = "test LN";
+            entity.FirstName = "testInsert";
+            entity.LastName = "testInsert";
             entity.Id = Guid.NewGuid();
 
-            dc.tblDirectors.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]

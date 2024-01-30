@@ -2,7 +2,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utGenre : utBase
+    public class utGenre : utBase<tblGenre>
     {
         
         [TestMethod]
@@ -15,13 +15,12 @@ namespace DDB.DVDCentral.PL.Test
         [TestMethod]
         public void InsertTest()
         {
-            tblGenre entity = new tblGenre();
-            entity.Description = "test";
-            entity.Id = Guid.NewGuid() ;
+            tblGenre entity = new tblGenre(); 
+            entity.Description = "testUpdate";
+            entity.Id = Guid.NewGuid();
 
-            dc.tblGenres.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]

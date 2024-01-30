@@ -3,8 +3,15 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utCustomer : utBase
+    public class utCustomer : utBase<tblCustomer>
     {
+        [TestMethod]
+        public void LoadTest()
+        {
+            int expected = 13;
+            var customers = base.LoadTest();
+            Assert.IsTrue(customers.Count == expected);
+        }
         
 
         [TestMethod]

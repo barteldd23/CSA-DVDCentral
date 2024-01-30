@@ -3,7 +3,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utMovieGenre : utBase
+    public class utMovieGenre : utBase<tblMovieGenre>
     {
         
 
@@ -17,12 +17,12 @@ namespace DDB.DVDCentral.PL.Test
         public void InsertTest()
         {
             tblMovieGenre entity = new tblMovieGenre();
-            entity.MovieId = dc.tblMovies.FirstOrDefault().Id;
-            entity.GenreId = dc.tblGenres.FirstOrDefault().Id;
+            entity.MovieId = base.LoadTest().FirstOrDefault().MovieId;
+            entity.GenreId = base.LoadTest().FirstOrDefault().GenreId;
             entity.Id = Guid.NewGuid();
-            dc.tblMovieGenres.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]

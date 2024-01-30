@@ -2,7 +2,7 @@
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
-    public class utMovie : utBase
+    public class utMovie : utBase<tblMovie>
     {
        
 
@@ -38,17 +38,16 @@ namespace DDB.DVDCentral.PL.Test
             entity.Title = "test Title";
             entity.Description = "test Desccription";
             entity.Cost = 9.99;
-            entity.RatingId = dc.tblRatings.FirstOrDefault().Id;
-            entity.FormatId = dc.tblFormats.FirstOrDefault().Id;
-            entity.DirectorId = dc.tblDirectors.FirstOrDefault().Id;
+            entity.RatingId = base.LoadTest().FirstOrDefault().RatingId;
+            entity.FormatId = base.LoadTest().FirstOrDefault().FormatId;
+            entity.DirectorId = base.LoadTest().FirstOrDefault().DirectorId;
             entity.Quantity = 2;
             entity.ImagePath = "test path";
 
             entity.Id = Guid.NewGuid();
 
-            dc.tblMovies.Add(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            int rowsAffected = base.InsertTest(entity);
+            Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
