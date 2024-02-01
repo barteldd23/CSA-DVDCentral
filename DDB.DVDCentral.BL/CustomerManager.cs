@@ -1,12 +1,5 @@
 ﻿using DDB.DVDCentral.PL;
 using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DDB.DVDCentral.BL
 {
