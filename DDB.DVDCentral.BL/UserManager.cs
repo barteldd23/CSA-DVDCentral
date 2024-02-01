@@ -136,7 +136,7 @@ namespace DDB.DVDCentral.BL
                         {
                             User user1 = new User
                             {
-                                Id = 1,
+                                Id = Guid.NewGuid(),
                                 FirstName = "Brian",
                                 LastName = "Foote",
                                 UserName = "bfoote",
@@ -150,7 +150,7 @@ namespace DDB.DVDCentral.BL
                         {
                             User user2 = new User
                             {
-                                Id = 2,
+                                Id = Guid.NewGuid(),
                                 FirstName = "Dean",
                                 LastName = "Bartel",
                                 UserName = "dbartel",

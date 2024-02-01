@@ -24,7 +24,7 @@
                     entry.RatingId = movie.RatingId;
                     entry.FormatId = movie.FormatId;
                     entry.DirectorId = movie.DirectorId;
-                    entry.InStkQty = movie.InStkQty;
+                    entry.Quantity = movie.InStkQty;
                     entry.ImagePath = movie.ImagePath;
 
                     movie.Id = entry.Id;
