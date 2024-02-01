@@ -1,13 +1,4 @@
-﻿using DDB.DVDCentral.BL.Models;
-using DVDCentral.BL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class ShoppingCartManager
     {
@@ -51,7 +42,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static string Checkout(ShoppingCart cart, int custId)
+        public static string Checkout(ShoppingCart cart, Guid custId)
         {
             if(cart.TotalItems <= 0) 
             {

@@ -1,20 +1,9 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class MovieGenreManager
     {
-        public static int Insert(int movieId,
-                                 int genreId,
+        public static int Insert(Guid movieId,
+                                 Guid genreId,
                                  bool rollback = false)
         {
             int results = 0;
@@ -27,7 +16,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblMovieGenre entity = new tblMovieGenre();
-                    entity.Id = dc.tblMovieGenres.Any() ? dc.tblMovieGenres.Max(e => e.Id) + 1 : 1;
+                    entity.Id = Guid.NewGuid();
                     entity.MovieId = movieId;
                     entity.GenreId = genreId;
 
@@ -46,9 +35,9 @@ namespace DDB.DVDCentral.BL
             } 
         }
 
-        public static int Update(int id,
-                                 int newMovieId,
-                                 int newGenreId,
+        public static int Update(Guid id,
+                                 Guid newMovieId,
+                                 Guid newGenreId,
                                  bool rollback=false)
         {
             int results = 0;
@@ -83,7 +72,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int id,
+        public static int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -116,8 +105,8 @@ namespace DDB.DVDCentral.BL
                 throw;
             }
         }
-        public static int Delete(int movieId,
-                                 int genreId,
+        public static int Delete(Guid movieId,
+                                 Guid genreId,
                                  bool rollback = false)
         {
             int results = 0;
@@ -151,7 +140,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static List<int> GetGenres(int movieId)
+        public static List<Guid> GetGenres(Guid movieId)
         {
             using (DVDCentralEntities dc = new DVDCentralEntities())
             {
@@ -159,7 +148,7 @@ namespace DDB.DVDCentral.BL
                 tblMovieGenre entity = dc.tblMovieGenres.Where(e => e.MovieId == movieId).FirstOrDefault();
                 if (entity != null)
                 {
-                    List<int> genreIds = new List<int>();
+                    List<Guid> genreIds = new List<Guid>();
                     List<tblMovieGenre> entities = dc.tblMovieGenres.Where(e => e.Id == movieId).ToList();
                     foreach(tblMovieGenre item in entities)
                     {

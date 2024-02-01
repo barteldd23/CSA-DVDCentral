@@ -8,7 +8,7 @@ namespace DVDCentral.BL.Models
 {
     public class Rating
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public required string Description { get; set; }
     }
 }

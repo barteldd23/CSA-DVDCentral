@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DDB.DVDCentral.PL2.Entities;
 
-public class tblOrder
+public class tblOrder : IEntity
 {
     public Guid Id { get; set; }
 

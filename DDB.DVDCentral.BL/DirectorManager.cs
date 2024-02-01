@@ -1,15 +1,14 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Diagnostics;
-
+﻿
 namespace DDB.DVDCentral.BL
 {
-    public static class DirectorManager
+    public class DirectorManager : GenericManager<tblDirector>
     {
+        public DirectorManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
         
-        public static int Insert(Director director,
+        public int Insert(Director director,
                                  bool rollback = false) 
         {
             
@@ -23,7 +22,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblDirector entry = new tblDirector();
-                    entry.Id = dc.tblDirectors.Any() ? dc.tblDirectors.Max(e => e.Id) + 1 : 1;
+                    entry.Id = Guid.NewGuid();
                     entry.FirstName = director.FirstName;
                     entry.LastName = director.LastName;
 
@@ -45,7 +44,7 @@ namespace DDB.DVDCentral.BL
             }  
         }
 
-        public static int Update(Director director,
+        public int Update(Director director,
                                  bool rollback = false)
         {
             try
@@ -82,7 +81,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int Id,
+        public int Delete(Guid Id,
                                  bool rollback = false)
         {
             try
@@ -116,7 +115,7 @@ namespace DDB.DVDCentral.BL
       
         }
 
-        public static Director LoadById(int id)
+        public Director LoadById(Guid id)
         {
             try
             {
@@ -146,29 +145,28 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static List<Director> Load()
+        public List<Director> Load()
         {
-            List<Director> list = new List<Director>();
-
-            using (DVDCentralEntities dc = new DVDCentralEntities())
+            try
             {
-                (from e in dc.tblDirectors
-                 select new
-                 {
-                     e.Id,
-                     e.FirstName,
-                     e.LastName
-                 })
-                 .ToList()
-                 .ForEach(director => list.Add(new Director
-                 {
-                     Id = director.Id,
-                     FirstName = director.FirstName,
-                     LastName = director.LastName
-                 }));
-            }
+                List<Director> rows = new List<Director>();
 
-            return list;
+                base.Load()
+                .ForEach(d => rows.Add(
+                    new Director
+                    {
+                        Id = d.Id,
+                        FirstName = d.FirstName,
+                        LastName = d.LastName
+                    }));
+
+                return rows;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

@@ -1,14 +1,4 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class OrderItemManager
     {
@@ -25,7 +15,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblOrderItem entity = new tblOrderItem();
-                    entity.Id = dc.tblOrderItems.Any() ? dc.tblOrderItems.Max(e => e.Id) + 1 : 1;
+                    entity.Id = Guid.NewGuid();
                     entity.OrderId = orderItem.OrderId;
                     entity.MovieId = orderItem.MovieId;
                     entity.Quantity = orderItem.Quantity;
@@ -89,7 +79,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int id,
+        public static int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -123,7 +113,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static OrderItem LoadById(int id)
+        public static OrderItem LoadById(Guid id)
         {
             try
             {
@@ -190,7 +180,7 @@ namespace DDB.DVDCentral.BL
             return list;
         }
 
-        public static List<OrderItem> LoadByOrderId(int orderId)
+        public static List<OrderItem> LoadByOrderId(Guid orderId)
         {
             // I think its finished 15Oct
 

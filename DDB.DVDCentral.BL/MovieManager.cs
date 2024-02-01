@@ -1,10 +1,4 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Diagnostics;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class MovieManager
     {
@@ -23,7 +17,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblMovie entry = new tblMovie();
-                    entry.Id = dc.tblMovies.Any() ? dc.tblMovies.Max(e => e.Id) + 1 : 1;
+                    entry.Id = Guid.NewGuid();
                     entry.Description = movie.Description;
                     entry.Title = movie.Title;
                     entry.Cost = movie.Cost;
@@ -72,7 +66,7 @@ namespace DDB.DVDCentral.BL
                         entry.RatingId = movie.RatingId;
                         entry.FormatId = movie.FormatId;
                         entry.DirectorId = movie.DirectorId;
-                        entry.InStkQty = movie.InStkQty;
+                        entry.Quantity = movie.InStkQty;
                         entry.ImagePath = movie.ImagePath;
                         results = dc.SaveChanges();
                         if (rollback) transaction.Rollback();
@@ -94,7 +88,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int Id,
+        public static int Delete(Guid Id,
                                  bool rollback=false)
         {
             try
@@ -128,7 +122,7 @@ namespace DDB.DVDCentral.BL
       
         }
 
-        public static Movie LoadById(int id)
+        public static Movie LoadById(Guid id)
         {
             try
             {
@@ -147,7 +141,7 @@ namespace DDB.DVDCentral.BL
                             RatingId = entity.RatingId,
                             FormatId = entity.FormatId,
                             DirectorId = entity.DirectorId,
-                            InStkQty = entity.InStkQty,
+                            InStkQty = entity.Quantity,
                             ImagePath = entity.ImagePath
                         };
                     }
@@ -164,7 +158,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static List<Movie> Load(int? genreId = null)
+        public static List<Movie> Load(Guid? genreId = null)
         {
             List<Movie> list = new List<Movie>();
 
@@ -185,7 +179,7 @@ namespace DDB.DVDCentral.BL
                      e.RatingId,
                      e.FormatId,
                      e.DirectorId, 
-                     e.InStkQty,
+                     e.Quantity,
                      e.ImagePath,
                      RatingDescription = r.Description,
                      FormatDescription = f.Description,
@@ -201,7 +195,7 @@ namespace DDB.DVDCentral.BL
                      RatingId = movie.RatingId,
                      FormatId = movie.FormatId,
                      DirectorId = movie.DirectorId,
-                     InStkQty = movie.InStkQty,
+                     InStkQty = movie.Quantity,
                      ImagePath = movie.ImagePath,
                      RatingDescription = movie.RatingDescription,
                      FormatDescription = movie.FormatDescription,

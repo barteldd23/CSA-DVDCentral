@@ -8,7 +8,7 @@ namespace DVDCentral.BL.Models
 {
     public class Customer
     {
-        public required int Id { get; set; }
+        public required Guid Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string Address { get; set; }
@@ -16,7 +16,7 @@ namespace DVDCentral.BL.Models
         public required string State { get; set; }
         public required string ZIP { get; set;}
         public required string Phone { get; set;}
-        public required int UserId { get; set; }
+        public required Guid UserId { get; set; }
         public string FullName
         {
             get { return FirstName + " " + LastName; }

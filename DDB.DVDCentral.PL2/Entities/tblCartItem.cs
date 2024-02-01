@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DDB.DVDCentral.PL2.Entities
 {
-    public class tblCartItem
+    public class tblCartItem : IEntity
     {
         public Guid Id { get; set; }
         public Guid CartId { get; set; }

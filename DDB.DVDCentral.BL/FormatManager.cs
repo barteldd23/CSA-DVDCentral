@@ -1,10 +1,4 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Diagnostics;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class FormatManager
     {
@@ -23,7 +17,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblFormat entry = new tblFormat();
-                    entry.Id = dc.tblFormats.Any() ? dc.tblFormats.Max(e => e.Id) + 1 : 1;
+                    entry.Id = Guid.NewGuid();
                     entry.Description = format.Description;
 
                     format.Id = entry.Id;
@@ -80,7 +74,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int Id,
+        public static int Delete(Guid Id,
                                  bool rollback = false)
         {
             try
@@ -114,7 +108,7 @@ namespace DDB.DVDCentral.BL
       
         }
 
-        public static Format LoadById(int id)
+        public static Format LoadById(Guid id)
         {
             try
             {

@@ -9,11 +9,11 @@ namespace DVDCentral.BL.Models
 {
     public class OrderItem
     {
-        public  int Id { get; set; }
-        public  int  OrderId { get; set; }
-        public required int MovieId { get; set; }
-        public required int Quantity { get; set; }
-        public required double Cost { get; set; }
+        public  Guid Id { get; set; }
+        public  Guid  OrderId { get; set; }
+        public Guid MovieId { get; set; }
+        public int Quantity { get; set; }
+        public double Cost { get; set; }
 
         [DisplayName("Movie Title")]
         public string MovieTitle { get; set; }

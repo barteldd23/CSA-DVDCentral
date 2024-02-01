@@ -10,11 +10,11 @@ namespace DVDCentral.BL.Models
 {//
     public class Order
     {
-        public int Id { get; set; }
-        public required int CustomerId { get; set; }
+        public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public required DateTime OrderDate { get; set; }
-        public required int UserId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public Guid UserId { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public  DateTime ShipDate { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

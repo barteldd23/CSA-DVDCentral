@@ -1,13 +1,5 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Humanizer;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DDB.DVDCentral.BL
 {
@@ -45,7 +37,7 @@ namespace DDB.DVDCentral.BL
                 if (rollback) transaction = dc.Database.BeginTransaction();
 
                 tblUser entity = new tblUser();
-                entity.Id = dc.tblUsers.Any() ? dc.tblUsers.Max(s => s.Id) + 1 : 1;  // get last ID in table and add 1, or set Id to 1 because there are no Values in the table.
+                entity.Id = Guid.NewGuid();  // get last ID in table and add 1, or set Id to 1 because there are no Values in the table.
                 entity.FirstName = user.FirstName;
                 entity.LastName = user.LastName;
                 entity.UserName = user.UserName;
@@ -101,7 +93,7 @@ namespace DDB.DVDCentral.BL
             }
             
 		}
-		public static int Delete(int id, bool rollback = false) 
+		public static int Delete(Guid id, bool rollback = false) 
 		{
             try
             {
@@ -262,7 +254,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static User LoadById(int id)
+        public static User LoadById(Guid id)
         {
             try
             {

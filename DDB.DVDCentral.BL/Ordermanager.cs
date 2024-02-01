@@ -1,15 +1,4 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static NuGet.Packaging.PackagingConstants;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class OrderManager
     {
@@ -26,7 +15,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblOrder entity = new tblOrder();
-                    entity.Id = dc.tblOrders.Any() ? dc.tblOrders.Max(e => e.Id) + 1 : 1;
+                    entity.Id = Guid.NewGuid();
                     entity.CustomerId = order.CustomerId;
                     entity.OrderDate = order.OrderDate;
                     entity.UserId = order.UserId;
@@ -114,7 +103,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int id,
+        public static int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -148,7 +137,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static Order LoadById(int id)
+        public static Order LoadById(Guid id)
         {
             try
             {
@@ -203,7 +192,7 @@ namespace DDB.DVDCentral.BL
             
         }
 
-        public static List<Order> Load(int? customerId = null)
+        public static List<Order> Load(Guid? customerId = null)
         {
             List<Order> list = new List<Order>();
             List<Order> orders = new List<Order>();

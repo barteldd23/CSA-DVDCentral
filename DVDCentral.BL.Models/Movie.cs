@@ -9,16 +9,16 @@ namespace DVDCentral.BL.Models
 {
     public class Movie
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public  string Title { get; set; }
         public  string Description { get; set; }
         public  double Cost { get; set; }
         [DisplayName("Rating")]
-        public  int RatingId { get; set; }
+        public  Guid RatingId { get; set; }
         [DisplayName("Format")]
-        public  int FormatId { get; set; }
+        public  Guid FormatId { get; set; }
         [DisplayName("Director")]
-        public  int DirectorId { get; set; }
+        public  Guid DirectorId { get; set; }
         [DisplayName("In Stock Quantity")]
         public  int InStkQty { get; set; }
 

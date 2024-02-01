@@ -1,7 +1,4 @@
-﻿using DDB.DVDCentral.PL;
-using DVDCentral.BL.Models;
-
-namespace DDB.DVDCentral.BL
+﻿namespace DDB.DVDCentral.BL
 {
     public static class CustomerManager
     {
@@ -18,7 +15,7 @@ namespace DDB.DVDCentral.BL
                     if (rollback) transaction = dc.Database.BeginTransaction();
 
                     tblCustomer entity = new tblCustomer();
-                    entity.Id = dc.tblCustomers.Any() ? dc.tblCustomers.Max(e => e.Id) + 1 : 1;
+                    entity.Id = Guid.NewGuid();
                     entity.FirstName = customer.FirstName;
                     entity.LastName = customer.LastName;
                     entity.Address = customer.Address;
@@ -86,7 +83,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static int Delete(int id,
+        public static int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -120,7 +117,7 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public static Customer LoadById(int id)
+        public static Customer LoadById(Guid id)
         {
             try
             {
@@ -195,7 +192,7 @@ namespace DDB.DVDCentral.BL
         }
 
         // Overload to return all customers associated with this userId
-        public static List<Customer> Load(int userId)
+        public static List<Customer> Load(Guid userId)
         {
             List<Customer> list = new List<Customer>();
 
