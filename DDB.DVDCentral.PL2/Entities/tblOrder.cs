@@ -14,4 +14,6 @@ public class tblOrder
     public Guid UserId { get; set; }
 
     public DateTime ShipDate { get; set; }
+    public virtual ICollection<tblOrderItem> OrderItems { get; set; }
+    public virtual tblCustomer Customer { get; set; }
 }

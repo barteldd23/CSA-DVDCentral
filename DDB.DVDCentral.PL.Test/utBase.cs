@@ -7,7 +7,7 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utBase<T> where T : class
     {
-        protected DVDCentralEntities dc; // Declare the DataContext
+        protected DVDCentralEntities dc;  // declare the DataContext
         protected IDbContextTransaction transaction;
         private IConfigurationRoot _configuration;
         private DbContextOptions<DVDCentralEntities> options;
@@ -25,16 +25,18 @@ namespace DDB.DVDCentral.PL.Test
                 .Options;
 
             dc = new DVDCentralEntities(options);
+
         }
 
+
         [TestInitialize]
-        public void Initialize()
+        public void TestInitialize()
         {
             transaction = dc.Database.BeginTransaction();
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public void TestCleanup()
         {
             transaction.Rollback();
             transaction.Dispose();
@@ -52,11 +54,14 @@ namespace DDB.DVDCentral.PL.Test
             dc.Set<T>().Add(row);
             return dc.SaveChanges();
         }
+
         public int UpdateTest(T row)
         {
+
             dc.Entry(row).State = EntityState.Modified;
             return dc.SaveChanges();
         }
+
         public int DeleteTest(T row)
         {
             dc.Set<T>().Remove(row);

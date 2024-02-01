@@ -22,4 +22,5 @@ public class tblCustomer
     public string Phone { get; set; } = null!;
 
     public Guid UserId { get; set; }
+    public virtual ICollection<tblOrder> Orders { get; set; }
 }

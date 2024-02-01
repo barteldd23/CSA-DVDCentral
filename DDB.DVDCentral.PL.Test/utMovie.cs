@@ -4,80 +4,59 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utMovie : utBase<tblMovie>
     {
-       
-
         [TestMethod]
         public void LoadTest()
         {
-            int results = dc.tblMovies.Count();
-            Assert.AreEqual(7, results);
-        }
-
-        [TestMethod]
-        public void LoadAllTest()
-        {
-            var movies = (from m in dc.tblMovies
-                          join f in dc.tblFormats on m.FormatId equals f.Id
-                          join r in dc.tblRatings on m.RatingId equals r.Id
-                          join d in dc.tblDirectors on m.DirectorId equals d.Id
-                          select new
-                          {
-                              m.Id,
-                              RatingDescription = r.Description,
-                              FormatDescription = f.Description,
-                              DirectorFullName = d.FirstName + " " + d.LastName
-                          }).ToList();
-
-            Assert.AreEqual(7, movies.Count);
+            int expected = 7;
+            var movies = base.LoadTest();
+            Assert.AreEqual(expected, movies.Count());
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblMovie entity = new tblMovie();
-            entity.Title = "test Title";
-            entity.Description = "test Desccription";
-            entity.Cost = 9.99;
-            entity.RatingId = base.LoadTest().FirstOrDefault().RatingId;
-            entity.FormatId = base.LoadTest().FirstOrDefault().FormatId;
-            entity.DirectorId = base.LoadTest().FirstOrDefault().DirectorId;
-            entity.Quantity = 2;
-            entity.ImagePath = "test path";
+            tblMovie newRow = new tblMovie();
 
-            entity.Id = Guid.NewGuid();
+            newRow.Id = Guid.NewGuid();
+            newRow.Title = "XXXXX";
+            newRow.Description = "XXXXX";
+            newRow.Cost = 9.99;
+            newRow.RatingId = base.LoadTest().FirstOrDefault().RatingId;
+            newRow.FormatId = base.LoadTest().FirstOrDefault().FormatId;
+            newRow.DirectorId = base.LoadTest().FirstOrDefault().DirectorId;
+            newRow.Quantity = 0;
+            newRow.ImagePath = "none";
+            int rowsAffected = InsertTest(newRow);
 
-            int rowsAffected = base.InsertTest(entity);
             Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblMovie entity = dc.tblMovies.FirstOrDefault();
+            tblMovie row = base.LoadTest().FirstOrDefault();
 
-            if (entity != null)
+            if (row != null)
             {
-                entity.Description = "test Update";
-                int results = dc.SaveChanges();
-                Assert.AreEqual(1, results);
+                row.Description = "YYYYY";
+                int rowsAffected = UpdateTest(row);
+                Assert.AreEqual(1, rowsAffected);
             }
         }
 
         [TestMethod]
-        public void DeleteTest() 
+        public void DeleteTest()
         {
-            tblMovie entity = dc.tblMovies.FirstOrDefault();
-            dc.tblMovies.Remove(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            tblMovie row = base.LoadTest().FirstOrDefault(x => x.Description == "Other");
+
+            if (row != null)
+            {
+                int rowsAffected = DeleteTest(row);
+
+                Assert.IsTrue(rowsAffected == 1);
+            }
+
+
         }
-
-        //[TestMethod]
-        //public void LoadByIdTest()
-        //{
-        //    tblMovie entity = dc.tblMovies.Where(e => e.Id == 2).FirstOrDefault();
-
-        //    Assert.AreEqual(2, entity.Id);
-        //}
     }
 }

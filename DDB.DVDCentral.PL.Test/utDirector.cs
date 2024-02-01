@@ -5,55 +5,55 @@ namespace DDB.DVDCentral.PL.Test
     public class utDirector : utBase<tblDirector>
     {
 
-
         [TestMethod]
         public void LoadTest()
         {
-            int results = dc.tblDirectors.Count();
-            Assert.AreEqual(6, results);
+            int expected = 6;
+            var directors = base.LoadTest();
+            Assert.AreEqual(expected, directors.Count());
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblDirector entity = new tblDirector();
-            entity.FirstName = "testInsert";
-            entity.LastName = "testInsert";
-            entity.Id = Guid.NewGuid();
-
-            int rowsAffected = base.InsertTest(entity);
+            int rowsAffected = InsertTest(new tblDirector
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Joe",
+                LastName = "Billings"
+            });
             Assert.AreEqual(1, rowsAffected);
+
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblDirector entity = dc.tblDirectors.FirstOrDefault();
+            tblDirector row = base.LoadTest().FirstOrDefault();
 
-            if (entity != null)
+            if (row != null)
             {
-                entity.FirstName = "test Update";
-                int results = dc.SaveChanges();
-                Assert.AreEqual(1, results);
+                row.FirstName = "Sarah";
+                row.LastName = "Vicchiollo";
+                int rowsAffected = UpdateTest(row);
+                Assert.AreEqual(1, rowsAffected);
             }
         }
 
+
         [TestMethod]
-        public void DeleteTest() 
+        public void DeleteTest()
         {
-            tblDirector entity = dc.tblDirectors.FirstOrDefault();
-            // tblDirector entity = dc.tblDirectors.OrderBy(d => d.Id).LastOrDefault();
-            dc.tblDirectors.Remove(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+            tblDirector row = dc.tblDirectors.FirstOrDefault(x => x.LastName == "Other");
+
+            if (row != null)
+            {
+                int rowsAffected = DeleteTest(row);
+
+                Assert.IsTrue(rowsAffected == 1);
+            }
+
+
         }
-
-        //[TestMethod]
-        //public void LoadByIdTest()
-        //{
-        //    tblDirector entity = dc.tblDirectors.Where(e => e.Id == 2).FirstOrDefault();
-
-        //    Assert.AreEqual(2, entity.Id);
-        //}
     }
 }

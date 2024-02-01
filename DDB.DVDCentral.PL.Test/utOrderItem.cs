@@ -5,51 +5,61 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utOrderItem : utBase<tblOrderItem>
     {
-       
+
         [TestMethod]
         public void LoadTest()
         {
-            Assert.AreEqual(3, dc.tblOrderItems.Count());
+            int expected = 3;
+            var orderItems = base.LoadTest();
+            Assert.AreEqual(expected, orderItems.Count());
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblOrderItem entity = new tblOrderItem();
-            entity.OrderId = dc.tblOrders.FirstOrDefault().Id;
-            entity.MovieId = dc.tblMovies.FirstOrDefault().Id;
-            entity.Quantity = 4;
-            entity.Cost = 9999.99;
-            entity.Id = Guid.NewGuid();
+            tblOrderItem newRow = new tblOrderItem();
 
-            int rowsAffected = base.InsertTest(entity);
+            newRow.Id = Guid.NewGuid();
+            newRow.MovieId = dc.tblMovies.FirstOrDefault().Id;
+            newRow.OrderId = dc.tblOrders.FirstOrDefault().Id;
+            newRow.Quantity = 99;
+            newRow.Cost = 9.99;
+
+            dc.tblOrderItems.Add(newRow);
+            int rowsAffected = dc.SaveChanges();
+
             Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblOrderItem entity = dc.tblOrderItems.FirstOrDefault();
+            tblOrderItem row = base.LoadTest().FirstOrDefault();
 
-            if(entity != null)
+            if (row != null)
             {
-                entity.Quantity = 99;
-                int results = dc.SaveChanges();
-                Assert.AreEqual(1, results);
+                row.MovieId = dc.tblMovies.FirstOrDefault().Id;
+                row.Quantity = 100;
+                row.Cost = 10.99;
+                int rowsAffected = UpdateTest(row);
+
+                Assert.AreEqual(1, rowsAffected);
             }
-            
         }
+
 
         [TestMethod]
         public void DeleteTest()
         {
-            tblOrderItem entity = dc.tblOrderItems.FirstOrDefault();
-            if(entity != null)
+
+            tblOrderItem row = base.LoadTest().FirstOrDefault();
+
+            if (row != null)
             {
-                dc.tblOrderItems.Remove(entity);
+                int rowsAffected = DeleteTest(row);
+                Assert.IsTrue(rowsAffected == 1);
             }
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+
         }
     }
 }

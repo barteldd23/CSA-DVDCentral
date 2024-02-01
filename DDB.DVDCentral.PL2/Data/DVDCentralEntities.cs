@@ -1,13 +1,11 @@
 ﻿using DDB.DVDCentral.PL2.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace DDB.DVDCentral.PL2.Data
 {
     public class DVDCentralEntities : DbContext
     {
-        Guid[] userId = new Guid[3];
+        Guid[] userId = new Guid[4];
         Guid[] formatId = new Guid[4];
         Guid[] customerId = new Guid[3];
         Guid[] directorId = new Guid[6];
@@ -185,6 +183,14 @@ namespace DDB.DVDCentral.PL2.Data
                 UserName = "bfoote",
                 Password = GetHash("maple")
             });
+            modelBuilder.Entity<tblUser>().HasData(new tblUser
+            {
+                Id = userId[3],
+                FirstName = "Other",
+                LastName = "Other",
+                UserName = "bfoote",
+                Password = GetHash("sophie")
+            });
         }
 
         private void CreateRatings(ModelBuilder modelBuilder)
@@ -225,12 +231,20 @@ namespace DDB.DVDCentral.PL2.Data
                 entity.ToTable("tblOrderItem");
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Order)
+                  .WithMany(p => p.OrderItems)
+                  .HasForeignKey(d => d.OrderId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("fk_tblOrderItem_OrderId");
+
             });
             List<tblOrderItem> OrderItems = new List<tblOrderItem>
             {
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[0], Cost = 8.99, MovieId = movieId[0]},
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[0], Cost = 9.99, MovieId = movieId[1]},
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 10.99, MovieId = movieId[1]}
+
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 8.99, MovieId = movieId[0]},
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 9.99, MovieId = movieId[1]},
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[2], Cost = 10.99, MovieId = movieId[1]}
             };
             modelBuilder.Entity<tblOrderItem>().HasData(OrderItems);
         }
@@ -252,12 +266,11 @@ namespace DDB.DVDCentral.PL2.Data
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
                 entity.Property(e => e.ShipDate).HasColumnType("datetime");
 
-
-                //entity.HasOne(d => d.Customer)
-                //  .WithMany(p => p.Id)
-                //  .HasForeignKey(d => d.CustomerId)
-                //  .OnDelete(DeleteBehavior.ClientSetNull)
-                //  .HasConstraintName("fk_tblOrder_CustomerId");
+                entity.HasOne(d => d.Customer)
+                  .WithMany(p => p.Orders)
+                  .HasForeignKey(d => d.CustomerId)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("fk_tblOrder_CustomerId");
 
             });
 
@@ -339,7 +352,8 @@ namespace DDB.DVDCentral.PL2.Data
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Director).WithMany(p => p.tblMovies)
+                entity.HasOne(d => d.Director)
+                    .WithMany(p => p.tblMovies)
                     .HasForeignKey(d => d.DirectorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_tblMovie_DirectorId");

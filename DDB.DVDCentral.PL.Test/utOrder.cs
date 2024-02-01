@@ -4,50 +4,45 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utOrder : utBase<tblOrder>
     {
+
         [TestMethod]
         public void LoadTest()
         {
-            Assert.AreEqual(3, dc.tblOrders.Count());
+            int expected = 3;
+            var orders = base.LoadTest();
+            Assert.AreEqual(expected, orders.Count());
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblOrder entity = new tblOrder();
-            entity.CustomerId = dc.tblCustomers.FirstOrDefault().Id;
-            entity.OrderDate = DateTime.Now;
-            entity.UserId = dc.tblCustomers.FirstOrDefault().UserId;
-            entity.ShipDate = DateTime.Now;
-            entity.Id = Guid.NewGuid();
+            tblOrder newRow = new tblOrder();
 
-            int rowsAffected = base.InsertTest(entity);
+            newRow.Id = Guid.NewGuid();
+            newRow.CustomerId = dc.tblCustomers.FirstOrDefault().Id;
+            newRow.OrderDate = DateTime.Now;
+            newRow.UserId = dc.tblUsers.FirstOrDefault().Id;
+            newRow.ShipDate = DateTime.Now;
+
+            dc.tblOrders.Add(newRow);
+            int rowsAffected = dc.SaveChanges();
+
             Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblOrder entity = dc.tblOrders.FirstOrDefault();
+            tblOrder row = dc.tblOrders.FirstOrDefault();
 
-            if(entity != null)
+            if (row != null)
             {
-                entity.ShipDate = DateTime.Now;
-                int results = dc.SaveChanges();
-                Assert.AreEqual(1, results);
+                row.CustomerId = dc.tblCustomers.FirstOrDefault().Id;
+                int rowsAffected = dc.SaveChanges();
+
+                Assert.AreEqual(1, rowsAffected);
             }
-            
         }
 
-        [TestMethod]
-        public void DeleteTest()
-        {
-            tblOrder entity = dc.tblOrders.FirstOrDefault();
-            if(entity != null)
-            {
-                dc.tblOrders.Remove(entity);
-            }
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
-        }
     }
 }

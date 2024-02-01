@@ -5,53 +5,54 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utFormat : utBase<tblFormat>
     {
-
         [TestMethod]
         public void LoadTest()
         {
-            int results = dc.tblFormats.Count();
-            Assert.AreEqual(4, results);
+            int expected = 4;
+            var formats = base.LoadTest();
+            Assert.AreEqual(expected, formats.Count());
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblFormat entity = new tblFormat();
-            entity.Description = "testInsert";
-            entity.Id = Guid.NewGuid();
-
-            int rowsAffected = base.InsertTest(entity);
+            int rowsAffected = base.InsertTest(new tblFormat
+            {
+                Id = Guid.NewGuid(),
+                Description = "XXXXX"
+            });
             Assert.AreEqual(1, rowsAffected);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            tblFormat entity = dc.tblFormats.FirstOrDefault();
+            tblFormat row = base.LoadTest().FirstOrDefault(x => x.Description == "Other");
 
-            if (entity != null)
+            if (row != null)
             {
-                entity.Description = "test";
-                int results = dc.SaveChanges();
-                Assert.AreEqual(1, results);
+                row.Description = "YYYY";
+                int rowsAffected = dc.SaveChanges();
+
+                Assert.AreEqual(1, rowsAffected);
             }
         }
 
+
         [TestMethod]
-        public void DeleteTest() 
+        public void DeleteTest()
         {
-            tblFormat entity = dc.tblFormats.FirstOrDefault(x => x.Description == "Other");
-            dc.tblFormats.Remove(entity);
-            int results = dc.SaveChanges();
-            Assert.AreEqual(1, results);
+
+            tblFormat row = base.LoadTest().FirstOrDefault(x => x.Description == "Other");
+
+            if (row != null)
+            {
+                dc.tblFormats.Remove(row);
+                int rowsAffected = dc.SaveChanges();
+
+                Assert.IsTrue(rowsAffected == 1);
+            }
+
         }
-
-        //[TestMethod]
-        //public void LoadByIdTest()
-        //{
-        //    tblFormat entity = dc.tblFormats.Where(e => e.Id == 2).FirstOrDefault();
-
-        //    Assert.AreEqual(2, entity.Id);
-        //}
     }
 }

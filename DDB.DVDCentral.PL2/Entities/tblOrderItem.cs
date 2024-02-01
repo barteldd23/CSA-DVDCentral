@@ -14,4 +14,6 @@ public class tblOrderItem
     public int Quantity { get; set; }
 
     public double Cost { get; set; }
+    public virtual tblMovie Movie { get; set; }
+    public virtual tblOrder Order { get; set; }
 }

@@ -9,25 +9,58 @@ namespace DDB.DVDCentral.PL.Test
     [TestClass]
     public class utUser : utBase<tblUser>
     {
+
         [TestMethod]
         public void LoadTest()
         {
-            var user = base.LoadTest();
-            Assert.IsTrue(user.Count > 0);
+            Assert.IsTrue(base.LoadTest().Count() > 0);
         }
 
         [TestMethod]
         public void InsertTest()
         {
-            tblUser entity = new tblUser();
-            entity.FirstName = "testInsert";
-            entity.LastName = "testLast";
-            entity.Password = "password";
-            entity.UserName = "username";
-            entity.Id = Guid.NewGuid();
+            tblUser newRow = new tblUser();
 
-            int rowsAffected = base.InsertTest(entity);
+            newRow.Id = Guid.NewGuid();
+            newRow.FirstName = "Joe";
+            newRow.LastName = "Billings";
+            newRow.UserName = "XXXXXX";
+            newRow.Password = "YYYYY";
+
+            int rowsAffected = InsertTest(newRow);
+
             Assert.AreEqual(1, rowsAffected);
+        }
+
+        [TestMethod]
+        public void UpdateTest()
+        {
+            tblUser row = base.LoadTest().FirstOrDefault();
+
+            if (row != null)
+            {
+                row.FirstName = "Sarah";
+                row.LastName = "Vicchiollo";
+                int rowsAffected = UpdateTest(row);
+
+                Assert.AreEqual(1, rowsAffected);
+            }
+        }
+
+
+        [TestMethod]
+        public void DeleteTest()
+        {
+            tblUser row = base.LoadTest().FirstOrDefault();
+
+            if (row != null)
+            {
+                dc.tblUsers.Remove(row);
+                int rowsAffected = DeleteTest(row);
+
+                Assert.IsTrue(rowsAffected == 1);
+            }
+
         }
     }
 }
