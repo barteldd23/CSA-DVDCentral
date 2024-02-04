@@ -1,10 +1,9 @@
 global using Microsoft.EntityFrameworkCore.Storage;
 global using System;
 global using System.Linq;
-global using Microsoft.Extensions.Configuration;
-global using Microsoft.Extensions.Configuration;
 global using DDB.DVDCentral.PL2.Data;
 global using DDB.DVDCentral.PL2.Entities;
 global using DDB.DVDCentral.BL.Models;
 global using Microsoft.EntityFrameworkCore;
 global using DVDCentral.BL.Models;
+global using System.Collections.Generic;

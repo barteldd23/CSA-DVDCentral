@@ -1,8 +1,9 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class GenreManager
+    public class GenreManager : GenericManager<tblGenre>
     {
-        
+        public GenreManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+
         public static int Insert(Genre genre,
                                  bool rollback = false) 
         {

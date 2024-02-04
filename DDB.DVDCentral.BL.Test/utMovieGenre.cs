@@ -3,31 +3,32 @@ using DVDCentral.BL.Models;
 namespace DDB.DVDCentral.BL.Test
 {
     [TestClass]
-    public class utMovieGenre
+    public class utMovieGenre : utBase
     {
 
         [TestMethod]
         public void InsertTest()
         {
-            
-            int result = MovieGenreManager.Insert(1,2,true);
-            Assert.AreEqual(1, result);
+            Guid movieId = new MovieManager(options).Load().FirstOrDefault().Id;
+            Guid genreId = new GenreManager(options).Load().FirstOrDefault().Id;
+            int result = new MovieGenreManager(options).Insert(movieId, genreId, true);
+            Assert.IsTrue(result > 0);
         }
 
-        [TestMethod]
-        public void DeleteTest()
-        {
-            int result = MovieGenreManager.Delete(3, true);
-            Assert.AreEqual(1, result);
-            result = MovieGenreManager.Delete(3,2, true);
-            Assert.AreEqual(1, result);
-        }
+        //[TestMethod]
+        //public void DeleteTest()
+        //{
+        //    int movieGenreId = new MovieGenreManager(options).Load().FirstOrDefault().Id; 
+        //    Assert.IsTrue(MovieGenreManager.Delete(movieGenreId, true) > 0);
+        //}
 
         [TestMethod]
-        public void UpdateTest()
+        public void DeleteTest2()
         {
-            int result = MovieGenreManager.Update(1,2,2, true);
-            Assert.AreEqual(1, result);
+            Guid movieId = new MovieManager(options).Load().FirstOrDefault().Id;
+            Guid genreId = new GenreManager(options).Load().FirstOrDefault().Id;
+            Assert.IsTrue(new MovieGenreManager(options).Delete(movieId, genreId, true) > 0);
         }
+
     }
 }

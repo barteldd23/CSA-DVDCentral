@@ -16,7 +16,7 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public Rating Get(int id)
+        public Rating Get(Guid id)
         {
             return RatingManager.LoadById(id);
         }
@@ -50,7 +50,7 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             try
             {

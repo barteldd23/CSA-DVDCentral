@@ -1,7 +1,11 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class ShoppingCartManager
+    public class ShoppingCartManager : GenericManager<tblCart>
     {
+        public ShoppingCartManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
         public static void Add(ShoppingCart cart, Movie item)
         {
             if (cart != null) 

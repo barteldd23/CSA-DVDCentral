@@ -1,7 +1,11 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class OrderManager
+    public class OrderManager : GenericManager<tblOrder>
     {
+        public OrderManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
         public static int Insert(Order order,
                              bool rollback = false)
         {

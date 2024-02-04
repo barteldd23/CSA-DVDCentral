@@ -1,7 +1,11 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class CustomerManager
+    public class CustomerManager : GenericManager<tblCustomer>
     {
+        public CustomerManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
         public static int Insert(Customer customer,
                              bool rollback = false)
         {

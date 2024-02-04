@@ -15,7 +15,7 @@ namespace DDB.DVDCentral.UI.Controllers
         }
 
         // GET: CustomerController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
             var item = CustomerManager.LoadById(id);
             ViewBag.Title = "Customer";
@@ -64,7 +64,7 @@ namespace DDB.DVDCentral.UI.Controllers
         }
 
         // GET: CustomerController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             var item = CustomerManager.LoadById(id);
             ViewBag.Title = "Edit Customer";
@@ -94,7 +94,7 @@ namespace DDB.DVDCentral.UI.Controllers
         }
 
         // GET: CustomerController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
             var item = CustomerManager.LoadById(id);
             ViewBag.Title = "Are You sure you want to delete this?";
@@ -108,7 +108,7 @@ namespace DDB.DVDCentral.UI.Controllers
         // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Guid id, IFormCollection collection)
         {
             try
             {

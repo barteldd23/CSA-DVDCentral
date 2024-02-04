@@ -1,8 +1,9 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class RatingManager
+    public class RatingManager : GenericManager<tblRating>
     {
-        
+        public RatingManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+
         public static int Insert(Rating rating,
                                  bool rollback = false) 
         {

@@ -1,8 +1,9 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class MovieManager
+    public class MovieManager : GenericManager<tblMovie>
     {
-        
+        public MovieManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+
         public static int Insert(Movie movie,
                                  bool rollback = false) 
         {

@@ -1,8 +1,9 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class FormatManager
+    public class FormatManager : GenericManager<tblFormat>
     {
-        
+        public FormatManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+
         public static int Insert(Format format,
                                  bool rollback = false) 
         {

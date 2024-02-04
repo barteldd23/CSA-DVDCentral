@@ -1,7 +1,11 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class MovieGenreManager
+    public class MovieGenreManager : GenericManager<tblMovieGenre>
     {
+        public MovieGenreManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
         public static int Insert(Guid movieId,
                                  Guid genreId,
                                  bool rollback = false)

@@ -16,8 +16,9 @@ namespace DDB.DVDCentral.BL
 
     }
 
-    public static class UserManager
+    public class UserManager : GenericManager<tblUser>
     {
+        public UserManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
         public static string GetHash(string password)
         {
