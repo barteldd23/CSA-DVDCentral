@@ -4,130 +4,14 @@
     {
         public RatingManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
-        public int Insert(Rating rating,
-                                 bool rollback = false) 
+        public int Insert(Rating rating, bool rollback = false)
         {
             try
             {
-                int results = 0;
-                using (DVDCentralEntities dc = new DVDCentralEntities())
-                {
-                    IDbContextTransaction transaction = null;
-                    if (rollback) transaction = dc.Database.BeginTransaction();
+                tblRating row = new tblRating { Description = rating.Description };
+                rating.Id = row.Id;
+                return base.Insert(row, rollback);
 
-                    tblRating entry = new tblRating();
-                    entry.Id = Guid.NewGuid();
-                    entry.Description = rating.Description;
-
-                    rating.Id = entry.Id;
-
-                    dc.tblRatings.Add(entry);
-
-                    results = dc.SaveChanges();
-
-                    if (rollback) transaction.Rollback();
-                }
-
-                return results;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }  
-        }
-
-        public int Update(Rating rating,
-                                 bool rollback = false)
-        {
-            try
-            {
-                int results = 0;
-                using (DVDCentralEntities dc = new DVDCentralEntities())
-                {
-                    IDbContextTransaction transaction = null;
-                    if(rollback) transaction = dc.Database.BeginTransaction();
-
-                    tblRating entity = dc.tblRatings.Where(e => e.Id == rating.Id).FirstOrDefault();
-
-                    if (entity != null)
-                    {
-                        entity.Description = rating.Description;
-                        results = dc.SaveChanges();
-                        if (rollback) transaction.Rollback();
-                    }
-                    else
-                    {
-                        throw new Exception("Row does not exist");
-                    }
-                }
-                
-                return results;
-                
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public int Delete(Guid Id,
-                                 bool rollback = false)
-        {
-            try
-            {
-                int results = 0;
-                using (DVDCentralEntities dc = new DVDCentralEntities())
-                {
-                    IDbContextTransaction transaction = null;
-                    if (rollback) transaction = dc.Database.BeginTransaction();
-
-                    tblRating entity = dc.tblRatings.Where(e => e.Id==Id).FirstOrDefault();
-                    if (entity != null)
-                    {
-                        dc.tblRatings.Remove(entity);
-                        results = dc.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new Exception("Row does not exist.");
-                    }
-
-                    if (rollback) transaction.Rollback();
-                    return results;
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-      
-        }
-
-        public Rating LoadById(Guid id)
-        {
-            try
-            {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
-                {
-                    tblRating entity = dc.tblRatings.Where(e => e.Id == id).FirstOrDefault();
-
-                    if (entity != null)
-                    {
-                        return new Rating
-                        {
-                            Id = entity.Id,
-                            Description = entity.Description
-                        };
-                    }
-                    else
-                    {
-                        throw new Exception("Row does not exist.");
-                    }
-                }
             }
             catch (Exception)
             {
@@ -138,25 +22,85 @@
 
         public List<Rating> Load()
         {
-            List<Rating> list = new List<Rating>();
 
-            using (DVDCentralEntities dc = new DVDCentralEntities())
+            try
             {
-                (from e in dc.tblRatings
-                 select new
-                 {
-                     e.Id,
-                     e.Description
-                 })
-                 .ToList()
-                 .ForEach(rating => list.Add(new Rating
-                 {
-                     Id = rating.Id,
-                     Description = rating.Description
-                 }));
+                List<Rating> rows = new List<Rating>();
+                base.Load()
+                    .ForEach(d => rows.Add(
+                        new Rating
+                        {
+                            Id = d.Id,
+                            Description = d.Description,
+                        }));
+
+                return rows;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            return list;
+        }
+
+        public Rating LoadById(Guid id)
+        {
+            try
+            {
+                tblRating row = base.LoadById(id);
+
+                if (row != null)
+                {
+                    Rating rating = new Rating
+                    {
+                        Id = row.Id,
+                        Description = row.Description,
+                    };
+
+                    return rating;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public int Update(Rating rating, bool rollback = false)
+        {
+            try
+            {
+                int results = base.Update(new tblRating
+                {
+                    Id = rating.Id,
+                    Description = rating.Description
+                }, rollback);
+                return results;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public int Delete(Guid id, bool rollback = false)
+        {
+            try
+            {
+                return base.Delete(id, rollback);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

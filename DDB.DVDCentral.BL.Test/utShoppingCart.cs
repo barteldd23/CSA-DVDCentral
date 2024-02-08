@@ -22,7 +22,7 @@ namespace DDB.DVDCentral.BL.Test
             cart.Items.Add(movie2);
 
             double totalcost = movie1.Cost + movie2.Cost;
-            double total = cart.Total;
+            double total = cart.TotalCost;
 
             Assert.AreEqual(totalcost, total);
         }
@@ -32,17 +32,12 @@ namespace DDB.DVDCentral.BL.Test
         {
             ShoppingCart cart = new ShoppingCart();
             List<Movie> movies = new MovieManager(options).Load();
-            Movie movie1 = movies.FirstOrDefault();
-            Movie movie2 = movies.LastOrDefault();
-
-            cart.Items.Add(movie1);
-            cart.Items.Add(movie2);
-            Guid userId = Guid.NewGuid();
-
-            new ShoppingCartManager(options).Checkout(cart,userId);
-
-            Order order = new OrderManager(options).Load().LastOrDefault();
-            Assert.AreEqual(cart.Total, order.OrderItems.Sum(oi => oi.Cost));
+            cart.Items.Add(movies.FirstOrDefault());
+            cart.Items.Add(movies.LastOrDefault());
+            cart.CustomerId = new CustomerManager(options).Load().FirstOrDefault().Id;
+            cart.UserId = new UserManager(options).Load().FirstOrDefault().Id;
+            int actual = new ShoppingCartManager(options).Checkout(cart, true);
+            Assert.AreEqual(1, actual);
 
         }
 

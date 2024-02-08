@@ -17,16 +17,19 @@ namespace DDB.DVDCentral.BL.Test
         //[TestMethod]
         //public void DeleteTest()
         //{
-        //    int movieGenreId = new MovieGenreManager(options).Load().FirstOrDefault().Id; 
-        //    Assert.IsTrue(MovieGenreManager.Delete(movieGenreId, true) > 0);
+        //    Guid movieGenreId = new MovieGenreManager(options).Load().FirstOrDefault().Id;
+        //    Assert.IsTrue(new MovieGenreManager(options).Delete(movieGenreId, true) > 0);
         //}
 
         [TestMethod]
         public void DeleteTest2()
         {
-            Guid movieId = new MovieManager(options).Load().FirstOrDefault().Id;
-            Guid genreId = new GenreManager(options).Load().FirstOrDefault().Id;
-            Assert.IsTrue(new MovieGenreManager(options).Delete(movieId, genreId, true) > 0);
+            Movie movie = new MovieManager(options).Load().FirstOrDefault();
+            Guid genreId = movie.Genres[0].Id;
+            
+            //Guid movieId = new MovieManager(options).Load().FirstOrDefault().Id;
+            //Guid genreId = new GenreManager(options).Load().FirstOrDefault().Id;
+            Assert.IsTrue(new MovieGenreManager(options).Delete(movie.Id, genreId, true) > 0);
         }
 
     }

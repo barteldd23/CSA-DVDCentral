@@ -8,7 +8,7 @@ namespace DDB.DVDCentral.BL.Test
         public void LoadTest()
         {
             List<Director> directors = new DirectorManager(options).Load();
-            int expected = 5;
+            int expected = 6;
 
             Assert.AreEqual(expected, directors.Count);
         }

@@ -36,5 +36,25 @@ namespace DDB.DVDCentral.BL.Models
         [DisplayName("Number In Cart")]
         public int CartQty { get; set; } = 0;
 
+        public List<Genre> Genres { get; set; } = new List<Genre>();
+
+        [DisplayName("Genres")]
+        public string GenreList
+        {
+            get
+            {
+                string genreList = string.Empty;
+                Genres.ForEach(a => genreList += a.Description + ", ");
+
+                if (!string.IsNullOrEmpty(genreList))
+                {
+                    genreList = genreList.Substring(0, genreList.Length - 2);
+
+                }
+                return genreList;
+            }
+
+        }
+
     }
 }

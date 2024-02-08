@@ -192,7 +192,7 @@
                              Quantity = r.Quantity,
                              Cost = r.Cost,
                              MovieTitle = r.MovieTitle,
-                             MovieImagePath = r.ImagePath
+                             ImagePath = r.ImagePath
                          }
                         ));
 
@@ -206,7 +206,5 @@
             }
 
         }
-
-
     }
 }

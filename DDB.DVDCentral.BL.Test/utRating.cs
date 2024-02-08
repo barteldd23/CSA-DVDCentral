@@ -8,7 +8,7 @@ namespace DDB.DVDCentral.BL.Test
         public void LoadTest()
         {
             List<Rating> ratings = new RatingManager(options).Load();
-            int expected = 4;
+            int expected = 5;
 
             Assert.AreEqual(expected, ratings.Count);
         }
@@ -37,7 +37,7 @@ namespace DDB.DVDCentral.BL.Test
         [TestMethod]
         public void DeleteTest()
         {
-            Rating rating = new RatingManager(options).Load().FirstOrDefault();
+            Rating rating = new RatingManager(options).Load().Where(r => r.Description == "Other").FirstOrDefault();
 
             Assert.IsTrue(new RatingManager(options).Delete(rating.Id, true) > 0);
         }

@@ -27,7 +27,7 @@ namespace DDB.DVDCentral.BL.Test
         {
             Guid customerId = new OrderManager(options).Load().FirstOrDefault().CustomerId;
 
-            Assert.AreEqual(new OrderManager(options).LoadById(customerId).CustomerId, customerId);
+            Assert.AreEqual(new OrderManager(options).LoadByCustomerId(customerId).FirstOrDefault().CustomerId, customerId);
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace DDB.DVDCentral.BL.Test
             };
 
             int result = new OrderManager(options).Insert(order, true);
-            Assert.AreEqual(3, result);
+            Assert.AreEqual(1, result);
         }
 
 

@@ -15,15 +15,15 @@
                 using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
                     var results = (from o in dc.tblOrders
-                                   join c in dc.tblCustomers on o.CustomerId equals c.Id
+                                       //join c in dc.tblCustomers on o.CustomerId equals c.Id
                                    join u in dc.tblUsers on o.UserId equals u.Id
                                    where o.CustomerId == customerId || customerId == null
                                    select new
                                    {
                                        Id = o.Id,
                                        CustomerId = o.CustomerId,
-                                       CustomerFisrtName = c.FirstName,
-                                       CustomerLastName = c.LastName,
+                                       CustomerFisrtName = o.Customer.FirstName,
+                                       CustomerLastName = o.Customer.LastName,
                                        UserName = u.UserName,
                                        OrderDate = o.OrderDate,
                                        UserId = o.UserId,
@@ -37,12 +37,14 @@
                     {
                         Id = o.Id,
                         CustomerId = o.CustomerId,
-                        FirstName = o.CustomerFisrtName,
-                        LastName = o.CustomerLastName,
+                        FirstName = o.UserFirstName,
+                        LastName = o.UserLastName,
+                        CustomerFullName = o.CustomerLastName + ", " + o.CustomerFisrtName,
                         OrderDate = o.OrderDate,
                         UserId = o.UserId,
                         UserName = o.UserName,
-                        ShipDate = o.ShipDate
+                        ShipDate = o.ShipDate,
+                        UserFullName = o.UserLastName + ", " + o.UserFirstName,
                     }));
 
                 }
@@ -67,15 +69,15 @@
                 using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
                     var row = (from o in dc.tblOrders
-                               join c in dc.tblCustomers on o.CustomerId equals c.Id
+                                   //join c in dc.tblCustomers on o.CustomerId equals c.Id
                                join u in dc.tblUsers on o.UserId equals u.Id
                                where o.Id == id
                                select new
                                {
                                    Id = o.Id,
                                    CustomerId = o.CustomerId,
-                                   CustomerFisrtName = c.FirstName,
-                                   CustomerLastName = c.LastName,
+                                   CustomerFisrtName = o.Customer.FirstName,
+                                   CustomerLastName = o.Customer.LastName,
                                    UserName = u.UserName,
                                    OrderDate = o.OrderDate,
                                    UserId = o.UserId,
@@ -90,12 +92,12 @@
                         {
                             Id = row.Id,
                             CustomerId = row.CustomerId,
-                            FirstName = row.CustomerFisrtName,
-                            LastName = row.CustomerLastName,
+                            CustomerFullName = row.CustomerLastName + ", " + row.CustomerFisrtName,
                             UserName = row.UserName,
                             OrderDate = row.OrderDate,
                             UserId = row.UserId,
                             ShipDate = row.ShipDate,
+                            UserFullName = row.UserLastName + ", " + row.UserFirstName,
                             OrderItems = new OrderItemManager(options).LoadByOrderId(row.Id)
                         };
 
@@ -130,55 +132,35 @@
         {
             try
             {
-                int results = 0;
+                tblOrder row = new tblOrder();
+                row.Id = Guid.NewGuid();
+                row.CustomerId = order.CustomerId;
+                row.OrderDate = DateTime.Now;
+                row.UserId = order.UserId;
+                row.ShipDate = row.OrderDate.AddDays(3);
 
-                using (DVDCentralEntities dc = new DVDCentralEntities(options))
+                foreach (OrderItem item in order.OrderItems)
                 {
-                    IDbContextTransaction transaction = null;
-                    if (rollback) transaction = dc.Database.BeginTransaction();
+                    item.OrderId = row.Id;
+                    tblOrderItem oirow = new tblOrderItem();
 
-                    tblOrder newRow = new tblOrder();
-                    // Teranary operator
-                    newRow.Id = Guid.NewGuid();
-                    newRow.CustomerId = order.CustomerId;
-                    newRow.OrderDate = DateTime.Now;
-                    newRow.UserId = order.UserId;
-                    newRow.ShipDate = newRow.OrderDate.AddDays(3);
+                    oirow.Id = Guid.NewGuid();
+                    oirow.OrderId = item.OrderId;
+                    oirow.MovieId = item.MovieId;
+                    oirow.Quantity = item.Quantity;
+                    oirow.Cost = item.Cost;
 
-                    // Insert the row
-                    dc.tblOrders.Add(newRow);
+                    item.Id = row.Id;
 
-                    // save order items ....
-                    foreach (OrderItem item in order.OrderItems)
-                    {
-                        item.OrderId = newRow.Id;
-                        //results += new OrderItemManager(options).Insert(item, rollback);
-                        tblOrderItem row = new tblOrderItem();
-
-                        row.Id = Guid.NewGuid();
-                        row.OrderId = item.OrderId;
-                        row.MovieId = item.MovieId;
-                        row.Quantity = item.Quantity;
-                        row.Cost = item.Cost;
-
-                        item.Id = row.Id;
-
-                        dc.tblOrderItems.Add(row);
-                    }
-
-                    // Backfill the id on the input parameter order
-                    order.Id = newRow.Id;
-                    // Commit the changes and get the number of rows affected
-                    results += dc.SaveChanges();
-
-                    if (rollback) transaction.Rollback();
                 }
-                return results;
+
+                return base.Insert(row, rollback);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
+
         }
 
 

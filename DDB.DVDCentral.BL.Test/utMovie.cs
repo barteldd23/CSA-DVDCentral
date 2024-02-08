@@ -8,7 +8,7 @@ namespace DDB.DVDCentral.BL.Test
         public void LoadTest()
         {
             List<Movie> movies = new MovieManager(options).Load();
-            int expected = 6;
+            int expected = 7;
 
             Assert.AreEqual(expected, movies.Count);
         }

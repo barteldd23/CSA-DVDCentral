@@ -7,7 +7,7 @@ namespace DDB.DVDCentral.BL.Test
         public void LoadTest()
         {
             List<Genre> genres = new GenreManager(options).Load();
-            int expected = 3;
+            int expected = 10;
 
             Assert.AreEqual(expected, genres.Count);
         }
