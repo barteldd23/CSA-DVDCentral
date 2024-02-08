@@ -1,4 +1,4 @@
-﻿using DVDCentral.BL.Models;
+﻿using DDB.DVDCentral.BL.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,45 +11,46 @@ namespace DDB.DVDCentral.BL.Models
 {
     public class ShoppingCart
     {
-        public List<Movie> Items { get; set; } = new List<Movie>();
-        public int NumItems { get; set; }
-        public int TotalItems
+
+        public List<Movie> Items { get; set; }
+        public int TotalCount { get { return Items.Count; } }
+
+        public Guid CustomerId { get; set; }
+        public Guid UserId { get; set; }
+        public double TotalCost { get { return Items.Sum(i => i.Cost); } }
+        public double Tax { get { return TotalCost * .05; } }
+        public double TCt { get { return TotalCost + Tax; } }
+
+        public ShoppingCart()
         {
-            get
+            Items = new List<Movie>();
+        }
+
+        public void Add(Movie movie)
+        {
+            if (!Items.Any(n => n.Id == movie.Id))
             {
-                int count = 0;
-                foreach (Movie item in Items)
-                {
-                    count += item.CartQty;
-                }
-                return count;
+                Items.Add(movie);
             }
-        }
-
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        [DisplayName("Sub Total")]
-        public double SubTotal { 
-            get 
+            else
             {
-                double subTotal = 0;
-                foreach (Movie item in Items)
+                foreach (var item in Items.Where(n => n.Id == movie.Id))
                 {
-                    subTotal += item.Cost * item.CartQty;
+                    item.CartQty++;
                 }
+            }
 
-                return subTotal;
-            } 
+            //TotalCost += movie.Cost;
         }
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        [DisplayName("Tax")]
-        public double Tax { get { return SubTotal * .055; } }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        [DisplayName("Order Total")]
-        public double Total { get { return SubTotal + Tax; } }
-
-
-
+        public void Remove(Movie movie)
+        {
+            //foreach (var item in Items.Where(n => n.Id == movie.Id))
+            //{
+            //    TotalCost -= (item.Cost * item.Quantity);
+            //}
+            Items.Remove(movie);
+        }
 
     }
 }

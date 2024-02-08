@@ -1,230 +1,180 @@
 ﻿namespace DDB.DVDCentral.BL
 {
-    public static class CustomerManager
+    public class CustomerManager : GenericManager<tblCustomer>
     {
-        public static int Insert(Customer customer,
-                             bool rollback = false)
+        public CustomerManager(DbContextOptions<DVDCentralEntities> options) : base(options)
         {
-            int results = 0;
 
-            try
-            {
-                using DVDCentralEntities dc = new DVDCentralEntities();
-                {
-                    IDbContextTransaction transaction = null;
-                    if (rollback) transaction = dc.Database.BeginTransaction();
-
-                    tblCustomer entity = new tblCustomer();
-                    entity.Id = Guid.NewGuid();
-                    entity.FirstName = customer.FirstName;
-                    entity.LastName = customer.LastName;
-                    entity.Address = customer.Address;
-                    entity.City = customer.City;
-                    entity.State = customer.State;
-                    entity.ZIP = customer.ZIP;
-                    entity.Phone = customer.Phone;
-                    entity.UserId = customer.UserId;
-
-                    customer.Id = entity.Id;
-
-                    dc.tblCustomers.Add(entity);
-                    results = dc.SaveChanges();
-
-                    if (rollback) transaction.Rollback();
-                }
-
-                return results;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            } 
         }
 
-        public static int Update(Customer customer,
-                                 bool rollback=false)
+        public int Insert(Customer Customer, bool rollback = false)
         {
-            int results = 0;
             try
             {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
+                try
                 {
-                    IDbContextTransaction transaction = null;
-                    if (rollback) transaction = dc.Database.BeginTransaction();
-                    tblCustomer entity = dc.tblCustomers.Where(e => e.Id == customer.Id).FirstOrDefault();
-                    if (entity != null)
+                    tblCustomer row = new tblCustomer();
+                    row.Id = Guid.NewGuid();
+                    row.FirstName = Customer.FirstName;
+                    row.LastName = Customer.LastName;
+                    row.Address = Customer.Address;
+                    row.City = Customer.City;
+                    row.State = Customer.State;
+                    row.ZIP = Customer.ZIP;
+                    row.Phone = Customer.Phone;
+                    row.UserId = Customer.UserId;
+                    return base.Insert(row, rollback);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public int Update(Customer customer, bool rollback = false)
+        {
+            try
+            {
+                try
+                {
+                    return base.Update(new tblCustomer
                     {
-                        entity.FirstName = customer.FirstName;
-                        entity.LastName = customer.LastName;
-                        entity.Address = customer.Address;
-                        entity.City = customer.City;
-                        entity.State = customer.State;
-                        entity.ZIP = customer.ZIP;
-                        entity.Phone = customer.Phone;
-                        entity.UserId = customer.UserId;
-
-                        results = dc.SaveChanges();
-                        if (rollback) transaction.Rollback();
-                    }
-                    else
-                    {
-                        throw new Exception("Row Does Not Exist.");
-                    }
-
+                        Id = customer.Id,
+                        FirstName = customer.FirstName,
+                        LastName = customer.LastName,
+                        Address = customer.Address,
+                        City = customer.City,
+                        State = customer.State,
+                        ZIP = customer.ZIP,
+                        Phone = customer.Phone,
+                        UserId = customer.UserId
+                    }, rollback);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
 
-                return results;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                throw ex;
+            }
+        }
+        public int Delete(Guid id, bool rollback = false)
+        {
+            try
+            {
+                return base.Delete(id, rollback);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<Customer> Load()
+        {
+            try
+            {
+                List<Customer> rows = new List<Customer>();
+                base.Load()
+                .ForEach(c => rows.Add(
+                    new Customer
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        Address = c.Address,
+                        City = c.City,
+                        State = c.State,
+                        ZIP = c.ZIP,
+                        Phone = c.Phone,
+                        UserId = c.UserId
+                    }));
+                return rows;
 
-                throw;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Customer LoadById(Guid id)
+        {
+            try
+            {
+                tblCustomer row = base.LoadById(id);
+
+                if (row != null)
+                {
+                    Customer customer = new Customer
+                    {
+                        Id = row.Id,
+                        FirstName = row.FirstName,
+                        LastName = row.LastName,
+                        Address = row.Address,
+                        City = row.City,
+                        State = row.State,
+                        ZIP = row.ZIP,
+                        Phone = row.Phone,
+                        UserId = row.UserId
+                    };
+                    return customer;
+                }
+                else
+                {
+                    throw new Exception("Row was not found.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
-        public static int Delete(Guid id,
-                                 bool rollback = false)
-        {
-            int results = 0;
-            try
-            {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
-                {
-                    IDbContextTransaction transaction = null;
-                    if(rollback) transaction = dc.Database.BeginTransaction();
-
-                    tblCustomer entity = dc.tblCustomers.Where(e =>e.Id == id).FirstOrDefault();
-                    if (entity != null)
-                    {
-                        dc.tblCustomers.Remove(entity);
-                        results = dc.SaveChanges();
-                        
-                    }
-                    else
-                    {
-                        throw new Exception("Row Does Not Exist.");
-                    }
-
-                    if (rollback) transaction.Rollback();
-                    return results;
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public static Customer LoadById(Guid id)
+        public Customer LoadByUserId(Guid userId)
         {
             try
             {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
-                    tblCustomer entity = dc.tblCustomers.Where(e => e.Id == id).FirstOrDefault();
-                    if (entity != null)
+
+                    var row = (from c in dc.tblCustomers
+                               where c.UserId == userId
+                               orderby c.Id descending
+                               select c).FirstOrDefault();
+
+                    var customer = new Customer();
+                    if (row != null)
                     {
-                        Customer customer = new Customer
-                        {
-                            Id = entity.Id,
-                            FirstName = entity.FirstName,
-                            LastName = entity.LastName,
-                            Address = entity.Address,
-                            City = entity.City,
-                            State = entity.State,
-                            ZIP = entity.ZIP,
-                            Phone = entity.Phone,
-                            UserId = entity.UserId
-                        };
+                        customer.Id = row.Id;
+                        customer.FirstName = row.FirstName;
+                        customer.LastName = row.LastName;
+                        customer.Address = row.Address;
+                        customer.City = row.City;
+                        customer.State = row.State;
+                        customer.ZIP = row.ZIP;
+                        customer.Phone = row.Phone;
+                        customer.UserId = row.UserId;
 
                         return customer;
                     }
                     else
                     {
-                        throw new Exception("Row Does Not Exist");
+                        throw new Exception("Row was not found.");
                     }
                 }
-                
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
-            
-        }
-
-        public static List<Customer> Load()
-        {
-            List<Customer> list = new List<Customer>();
-
-            using (DVDCentralEntities dc = new DVDCentralEntities())
-            {
-                (from e in dc.tblCustomers
-                 select new
-                 {
-                     e.Id,
-                     e.FirstName,
-                     e.LastName,
-                     e.Address,
-                     e.City,
-                     e.State,
-                     e.ZIP,
-                     e.Phone,
-                     e.UserId
-                 }).ToList()
-                 .ForEach( customer => list.Add(new Customer
-                 {
-                     Id = customer.Id,
-                     FirstName = customer.FirstName,
-                     LastName = customer.LastName,
-                     Address = customer.Address,
-                     City = customer.City,
-                     State = customer.State,
-                     ZIP = customer.ZIP,
-                     Phone = customer.Phone,
-                     UserId = customer.UserId
-                 }));
-            }
-            return list;
-        }
-
-        // Overload to return all customers associated with this userId
-        public static List<Customer> Load(Guid userId)
-        {
-            List<Customer> list = new List<Customer>();
-
-            using (DVDCentralEntities dc = new DVDCentralEntities())
-            {
-                (from e in dc.tblCustomers where e.UserId == userId
-                 select new
-                 {
-                     e.Id,
-                     e.FirstName,
-                     e.LastName,
-                     e.Address,
-                     e.City,
-                     e.State,
-                     e.ZIP,
-                     e.Phone,
-                     e.UserId
-                 }).ToList()
-                 .ForEach(customer => list.Add(new Customer
-                 {
-                     Id = customer.Id,
-                     FirstName = customer.FirstName,
-                     LastName = customer.LastName,
-                     Address = customer.Address,
-                     City = customer.City,
-                     State = customer.State,
-                     ZIP = customer.ZIP,
-                     Phone = customer.Phone,
-                     UserId = customer.UserId
-                 }));
-            }
-            return list;
         }
 
 

@@ -1,15 +1,15 @@
-using DVDCentral.BL.Models;
-
 namespace DDB.DVDCentral.BL.Test
 {
     [TestClass]
-    public class utGenre
+    public class utGenre : utBase
     {
         [TestMethod]
         public void LoadTest()
         {
-            List<Genre> list = GenreManager.Load();
-            Assert.AreEqual(4, list.Count);
+            List<Genre> genres = new GenreManager(options).Load();
+            int expected = 10;
+
+            Assert.AreEqual(expected, genres.Count);
         }
 
         [TestMethod]
@@ -17,27 +17,37 @@ namespace DDB.DVDCentral.BL.Test
         {
             Genre genre = new Genre
             {
-                Description = "Test",
-                Id = -99
+                Description = "XXXXX"
             };
-            int result = GenreManager.Insert(genre, true);
-            Assert.AreEqual(1, result);
-        }
 
-        [TestMethod]
-        public void DeleteTest()
-        {
-            int result = GenreManager.Delete(1, true);
-            Assert.AreEqual(1, result);
+            int result = new GenreManager(options).Insert(genre, true);
+            Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            Genre genre = GenreManager.LoadById(2);
-            genre.Description = "Test";
-            int result = GenreManager.Update(genre, true);
-            Assert.AreEqual(1, result);
+            Genre genre = new GenreManager(options).Load().FirstOrDefault();
+            genre.Description = "Blah blah";
+
+            Assert.IsTrue(new GenreManager(options).Update(genre, true) > 0);
         }
+
+        [TestMethod]
+        public void DeleteTest()
+        {
+            Genre genre = new GenreManager(options).Load().FirstOrDefault();
+
+            Assert.IsTrue(new GenreManager(options).Delete(genre.Id, true) > 0);
+        }
+
+        [TestMethod]
+        public void LoadByIdTest()
+        {
+            Genre genre = new GenreManager(options).Load().FirstOrDefault();
+            Assert.AreEqual(new GenreManager(options).LoadById(genre.Id).Id, genre.Id);
+        }
+
+
     }
 }

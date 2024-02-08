@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DVDCentral.BL.Models
+namespace DDB.DVDCentral.BL.Models
 {
     public class OrderItem
     {
@@ -17,7 +17,7 @@ namespace DVDCentral.BL.Models
 
         [DisplayName("Movie Title")]
         public string MovieTitle { get; set; }
-        public string MovieImagePath { get; set; }
+        public string ImagePath { get; set; }
 
         [DisplayName("Total Item Cost")]
         public double TotalCost

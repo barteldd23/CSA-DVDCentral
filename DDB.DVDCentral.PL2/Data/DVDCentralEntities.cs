@@ -42,8 +42,6 @@ namespace DDB.DVDCentral.PL2.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-          // optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DDB.DVDCentral.DB;Integrated Security=True");
-          // optionsBuilder.UseLazyLoadingProxies();
         }
 
         public DVDCentralEntities()
@@ -52,6 +50,7 @@ namespace DDB.DVDCentral.PL2.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
 
             CreateUsers(modelBuilder);
@@ -183,12 +182,13 @@ namespace DDB.DVDCentral.PL2.Data
                 UserName = "bfoote",
                 Password = GetHash("maple")
             });
+
             modelBuilder.Entity<tblUser>().HasData(new tblUser
             {
                 Id = userId[3],
                 FirstName = "Other",
                 LastName = "Other",
-                UserName = "bfoote",
+                UserName = "sophie",
                 Password = GetHash("sophie")
             });
         }
@@ -239,12 +239,13 @@ namespace DDB.DVDCentral.PL2.Data
                   .HasConstraintName("fk_tblOrderItem_OrderId");
 
             });
+
+
             List<tblOrderItem> OrderItems = new List<tblOrderItem>
             {
-
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 8.99, MovieId = movieId[0]},
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 9.99, MovieId = movieId[1]},
-                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[2], Cost = 10.99, MovieId = movieId[1]}
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 8.99, Quantity = 1, MovieId = movieId[0]},
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[1], Cost = 9.99, Quantity = 1, MovieId = movieId[1]},
+                new tblOrderItem {Id = Guid.NewGuid(), OrderId = orderId[2], Cost = 10.99, Quantity = 1, MovieId = movieId[1]}
             };
             modelBuilder.Entity<tblOrderItem>().HasData(OrderItems);
         }

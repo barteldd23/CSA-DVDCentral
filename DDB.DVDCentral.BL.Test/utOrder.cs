@@ -1,17 +1,33 @@
-﻿using DVDCentral.BL.Models;
-
+﻿
 namespace DDB.DVDCentral.BL.Test
 {
     [TestClass]
-    public class utOrder
+    public class utOrder : utBase
     {
         [TestMethod]
         public void LoadTest()
         {
-            List<Order> list = OrderManager.Load();
-            // Actual is 2 before UI is executed. Seed() is ran on HomeController and loads the 3rd user
-            // The OrderManager.Load() sql finds the 3rd order in the join after the 3rd user is created.
-            Assert.AreEqual(2,list.Count);
+            List<Order> orders = new OrderManager(options).Load();
+            int expected = 3;
+
+            Assert.AreEqual(expected, orders.Count);
+        }
+
+        [TestMethod]
+        public void LoadByIdTest()
+        {
+            Guid id = new OrderManager(options).Load().LastOrDefault().Id;
+            Order order = new OrderManager(options).LoadById(id);
+            Assert.AreEqual(order.Id, id);
+            Assert.IsTrue(order.OrderItems.Count > 0);
+        }
+
+        [TestMethod]
+        public void LoadByIdCustomerIdTest()
+        {
+            Guid customerId = new OrderManager(options).Load().FirstOrDefault().CustomerId;
+
+            Assert.AreEqual(new OrderManager(options).LoadByCustomerId(customerId).FirstOrDefault().CustomerId, customerId);
         }
 
         [TestMethod]
@@ -19,85 +35,56 @@ namespace DDB.DVDCentral.BL.Test
         {
             Order order = new Order
             {
-                Id = -99,
-                CustomerId = 1,
+                CustomerId = new CustomerManager(options).Load().FirstOrDefault().Id,
                 OrderDate = DateTime.Now,
-                UserId = 4,
-                ShipDate = DateTime.Now
+                UserId = new UserManager(options).Load().FirstOrDefault().Id,
+                ShipDate = DateTime.Now,
+                OrderItems = new List<OrderItem>()
             };
-            int result = OrderManager.Insert(order, true);
-            Assert.AreEqual(1,result);
+
+            int result = new OrderManager(options).Insert(order, true);
+            Assert.IsTrue(result > 0);
         }
+
+        [TestMethod]
+        public void InsertOrderOrderItemsTest()
+        {
+            Order order = new Order
+            {
+                CustomerId = new CustomerManager(options).Load().FirstOrDefault().Id,
+                OrderDate = DateTime.Now,
+                UserId = new UserManager(options).Load().FirstOrDefault().Id,
+                ShipDate = DateTime.Now,
+                OrderItems = new List<OrderItem>
+                {
+                    new OrderItem { Id = Guid.NewGuid(),
+                                    MovieId = new MovieManager(options).Load().FirstOrDefault().Id,
+                                    Cost = 9.99,
+                                    Quantity = 9}
+                }
+            };
+
+            int result = new OrderManager(options).Insert(order, true);
+            Assert.AreEqual(1, result);
+        }
+
 
         [TestMethod]
         public void UpdateTest()
         {
-            Order order = OrderManager.LoadById(1);
-            order.UserId = -99;
-            int result = OrderManager.Update(order, true);
-            Assert.AreEqual(1,result);
+            Order order = new OrderManager(options).Load().FirstOrDefault();
+            order.OrderDate = DateTime.Now;
+
+            Assert.IsTrue(new OrderManager(options).Update(order, true) > 0);
         }
 
         [TestMethod]
         public void DeleteTest()
         {
-            int result = OrderManager.Delete(2, true);
-            Assert.AreEqual(1,result);
+            Order order = new OrderManager(options).Load().FirstOrDefault();
+            Assert.IsTrue(new OrderManager(options).Delete(order.Id, true) > 0);
         }
 
-        [TestMethod]
-        public void InsertOrderItemsTest()
-        {
-            Order order = new Order
-            {
-                // removed required from Id on Orders class
-                CustomerId = 99,
-                OrderDate = DateTime.Now,
-                UserId = 99,
-                ShipDate = DateTime.Now,
-                OrderItems = new List<OrderItem>()
-                {
-                    new OrderItem
-                    {
-                        Id = 88,
-                        MovieId = 1,
-                        Cost = 9.99,
-                        Quantity = 9,
-                        // removed required from OrderId on OrderItem class
-                        
-                    },
-                    new OrderItem
-                    {
-                        Id = 99,
-                        MovieId = 2,
-                        Cost = 8.88,
-                        Quantity = 2,
-                        
-                    }
-                }
-            };
-            int result = OrderManager.Insert(order, true);
-            Assert.AreEqual(order.OrderItems[1].OrderId,order.Id);
-            Assert.AreEqual(1, result);
-        }
-
-        [TestMethod]
-        public void LoadByIdTest()
-        {
-            int id = OrderManager.Load().LastOrDefault().Id;
-            Order order = OrderManager.LoadById(id);
-            Assert.AreEqual(id,order.Id);
-            Assert.IsTrue(order.OrderItems.Count > 0);
-        }
-
-        [TestMethod]
-        public void LoadByCustomerIdTest()
-        {
-            int customerId = OrderManager.Load().FirstOrDefault().CustomerId;
-
-            // Assert.AreEqual(OrderManager.LoadById(customerId).CustomerId, customerId);
-            Assert.AreEqual(OrderManager.Load(customerId)[0].CustomerId, customerId);
-        }
 
 
     }

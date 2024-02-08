@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DVDCentral.BL.Models
+namespace DDB.DVDCentral.BL.Models
 {//
     public class Order
     {
@@ -46,5 +46,7 @@ namespace DVDCentral.BL.Models
 
         [DisplayName("User Name")]
         public string UserName { get; set; }
+        public string CustomerFullName { get; set; }
+        public string UserFullName { get; set; }
     }
 }

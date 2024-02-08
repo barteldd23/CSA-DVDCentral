@@ -1,15 +1,22 @@
-﻿using DVDCentral.BL.Models;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DDB.DVDCentral.BL.Test
 {
     [TestClass]
-    public class utCustomer
+    public class utCustomer : utBase
     {
         [TestMethod]
         public void LoadTest()
         {
-            List<Customer> list = CustomerManager.Load();
-            Assert.AreEqual(3,list.Count);
+            List<Customer> customers = new CustomerManager(options).Load();
+            int expected = 3;
+
+            Assert.AreEqual(expected, customers.Count);
         }
 
         [TestMethod]
@@ -17,40 +24,44 @@ namespace DDB.DVDCentral.BL.Test
         {
             Customer customer = new Customer
             {
-                Id = -99,
-                FirstName = "test",
-                LastName = "test",
-                Address = "test",
-                City = "test",
-                State = "test",
-                ZIP = "test",
-                Phone = "test",
-                UserId = -99
+                FirstName = "XXXXX",
+                LastName = "XXXXX",
+                Address = "XXXXX",
+                City = "XXXXX",
+                State = "XX",
+                ZIP = "XXXXX",
+                Phone = "XXX-XXX-XXXX",
+                UserId = new UserManager(options).Load().FirstOrDefault().Id
             };
-            int result = CustomerManager.Insert(customer, true);
-            Assert.AreEqual(1,result);
+
+            int result = new CustomerManager(options).Insert(customer, true);
+            Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
         public void UpdateTest()
         {
-            Customer customer = CustomerManager.LoadById(1);
-            customer.UserId = -99;
-            int result = CustomerManager.Update(customer, true);
-            Assert.AreEqual(1,result);
+            Customer customer = new CustomerManager(options).Load().FirstOrDefault();
+            customer.FirstName = "Blah blah";
+
+            Assert.IsTrue(new CustomerManager(options).Update(customer, true) > 0);
         }
 
         [TestMethod]
         public void DeleteTest()
         {
-            int result = CustomerManager.Delete(2, true);
-            Assert.AreEqual(1,result);
+            Customer customer = new CustomerManager(options).Load().LastOrDefault();
+
+            Assert.IsTrue(new CustomerManager(options).Delete(customer.Id, true) > 0);
         }
 
         [TestMethod]
-        public void LoadCustomersOfUserId()
+        public void LoadByIdTest()
         {
-            Assert.AreEqual(1, CustomerManager.Load(25).Count);
+            Customer customer = new CustomerManager(options).Load().FirstOrDefault();
+            Assert.AreEqual(new CustomerManager(options).LoadById(customer.Id).Id, customer.Id);
         }
+
+
     }
 }

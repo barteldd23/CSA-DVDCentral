@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DVDCentral.BL.Models
+namespace DDB.DVDCentral.BL.Models
 {
     public class Customer
     {
-        public required Guid Id { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public required string Address { get; set; }
-        public required string City { get; set; }
-        public required string State { get; set; }
-        public required string ZIP { get; set;}
-        public required string Phone { get; set;}
-        public required Guid UserId { get; set; }
+        public Guid Id { get; set; }
+        public  string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZIP { get; set;}
+        public string Phone { get; set;}
+        public Guid UserId { get; set; }
         public string FullName
         {
             get { return FirstName + " " + LastName; }
