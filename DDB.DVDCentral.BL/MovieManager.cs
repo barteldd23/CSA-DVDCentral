@@ -4,7 +4,7 @@
     {
         public MovieManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
-        public static int Insert(Movie movie,
+        public int Insert(Movie movie,
                                  bool rollback = false) 
         {
             
@@ -46,7 +46,7 @@
             }  
         }
 
-        public static int Update(Movie movie,
+        public int Update(Movie movie,
                                  bool rollback = false)
         {
             try
@@ -89,7 +89,7 @@
             }
         }
 
-        public static int Delete(Guid Id,
+        public int Delete(Guid Id,
                                  bool rollback=false)
         {
             try
@@ -123,7 +123,7 @@
       
         }
 
-        public static Movie LoadById(Guid id)
+        public Movie LoadById(Guid id)
         {
             try
             {
@@ -159,7 +159,7 @@
             }
         }
 
-        public static List<Movie> Load(Guid? genreId = null)
+        public List<Movie> Load(Guid? genreId = null)
         {
             List<Movie> list = new List<Movie>();
 

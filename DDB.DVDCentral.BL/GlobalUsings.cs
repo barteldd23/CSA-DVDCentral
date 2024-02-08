@@ -5,5 +5,5 @@ global using DDB.DVDCentral.PL2.Data;
 global using DDB.DVDCentral.PL2.Entities;
 global using DDB.DVDCentral.BL.Models;
 global using Microsoft.EntityFrameworkCore;
-global using DVDCentral.BL.Models;
+global using DDB.DVDCentral.BL.Models;
 global using System.Collections.Generic;

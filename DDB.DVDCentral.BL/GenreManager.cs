@@ -4,7 +4,7 @@
     {
         public GenreManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
-        public static int Insert(Genre genre,
+        public int Insert(Genre genre,
                                  bool rollback = false) 
         {
             
@@ -39,7 +39,7 @@
             }  
         }
 
-        public static int Update(Genre genre,
+        public int Update(Genre genre,
                                  bool rollback = false)
         {
             try
@@ -75,7 +75,7 @@
             }
         }
 
-        public static int Delete(Guid Id,
+        public int Delete(Guid Id,
                                  bool rollback = false)
         {
             try
@@ -109,7 +109,7 @@
       
         }
 
-        public static Genre LoadById(Guid id)
+        public Genre LoadById(Guid id)
         {
             try
             {
@@ -138,7 +138,7 @@
             }
         }
 
-        public static List<Genre> Load()
+        public List<Genre> Load()
         {
             List<Genre> list = new List<Genre>();
 

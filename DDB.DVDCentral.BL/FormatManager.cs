@@ -4,7 +4,7 @@
     {
         public FormatManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
-        public static int Insert(Format format,
+        public int Insert(Format format,
                                  bool rollback = false) 
         {
             
@@ -39,7 +39,7 @@
             }  
         }
 
-        public static int Update(Format format,
+        public int Update(Format format,
                                  bool rollback = false)
         {
             try
@@ -75,7 +75,7 @@
             }
         }
 
-        public static int Delete(Guid Id,
+        public int Delete(Guid Id,
                                  bool rollback = false)
         {
             try
@@ -109,7 +109,7 @@
       
         }
 
-        public static Format LoadById(Guid id)
+        public Format LoadById(Guid id)
         {
             try
             {
@@ -138,7 +138,7 @@
             }
         }
 
-        public static List<Format> Load()
+        public List<Format> Load()
         {
             List<Format> list = new List<Format>();
 

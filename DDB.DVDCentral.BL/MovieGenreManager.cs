@@ -6,7 +6,7 @@
         {
 
         }
-        public static int Insert(Guid movieId,
+        public int Insert(Guid movieId,
                                  Guid genreId,
                                  bool rollback = false)
         {
@@ -39,7 +39,7 @@
             } 
         }
 
-        public static int Update(Guid id,
+        public int Update(Guid id,
                                  Guid newMovieId,
                                  Guid newGenreId,
                                  bool rollback=false)
@@ -76,7 +76,7 @@
             }
         }
 
-        public static int Delete(Guid id,
+        public int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -109,7 +109,7 @@
                 throw;
             }
         }
-        public static int Delete(Guid movieId,
+        public int Delete(Guid movieId,
                                  Guid genreId,
                                  bool rollback = false)
         {
@@ -144,7 +144,7 @@
             }
         }
 
-        public static List<Guid> GetGenres(Guid movieId)
+        public List<Guid> GetGenres(Guid movieId)
         {
             using (DVDCentralEntities dc = new DVDCentralEntities())
             {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DVDCentral.BL.Models
+namespace DDB.DVDCentral.BL.Models
 {//
     public class Order
     {

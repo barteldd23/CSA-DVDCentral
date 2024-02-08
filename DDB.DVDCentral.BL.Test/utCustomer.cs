@@ -1,4 +1,9 @@
-﻿using DVDCentral.BL.Models;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DDB.DVDCentral.BL.Test
 {
@@ -45,7 +50,7 @@ namespace DDB.DVDCentral.BL.Test
         [TestMethod]
         public void DeleteTest()
         {
-            Customer customer = new CustomerManager(options).Load().FirstOrDefault();
+            Customer customer = new CustomerManager(options).Load().LastOrDefault();
 
             Assert.IsTrue(new CustomerManager(options).Delete(customer.Id, true) > 0);
         }

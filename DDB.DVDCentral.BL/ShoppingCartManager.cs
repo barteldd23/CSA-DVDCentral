@@ -6,7 +6,7 @@
         {
 
         }
-        public static void Add(ShoppingCart cart, Movie item)
+        public void Add(ShoppingCart cart, Movie item)
         {
             if (cart != null) 
             {
@@ -23,7 +23,7 @@
             }
         }
 
-        public static void Remove(ShoppingCart cart, Movie item)
+        public void Remove(ShoppingCart cart, Movie item)
         {
             if (cart != null) 
             {
@@ -46,7 +46,7 @@
             }
         }
 
-        public static string Checkout(ShoppingCart cart, Guid custId)
+        public string Checkout(ShoppingCart cart, Guid custId)
         {
             if(cart.TotalItems <= 0) 
             {
@@ -60,7 +60,7 @@
                 CustomerId = custId,
                 OrderDate = DateTime.Now,
                 ShipDate = DateTime.Now.AddDays(3),
-                UserId = CustomerManager.LoadById(custId).UserId
+                UserId = new CustomerManager(options).LoadById(custId).UserId
             };
 
 
@@ -72,7 +72,7 @@
                
                 try
                 {
-                    Movie inStkMovie = MovieManager.LoadById(item.Id);
+                    Movie inStkMovie = new MovieManager(options).LoadById(item.Id);
                     if (inStkMovie.InStkQty >= item.CartQty)
                     {
                         OrderItem orderItem = new OrderItem
@@ -98,7 +98,7 @@
                 
             }
 
-            OrderManager.Insert(order);
+            new OrderManager(options).Insert(order);
 
             // Decrement the tblMovie.InStkQty appropriately.
 

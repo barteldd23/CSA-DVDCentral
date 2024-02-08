@@ -6,218 +6,205 @@
         {
 
         }
-        public static int Insert(OrderItem orderItem,
-                             bool rollback = false)
+        public int Insert(OrderItem orderItem, bool rollback = false)
         {
-            int results = 0;
-
             try
             {
-                using DVDCentralEntities dc = new DVDCentralEntities();
+                int results = 0;
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
                     IDbContextTransaction transaction = null;
                     if (rollback) transaction = dc.Database.BeginTransaction();
+                    tblOrderItem row = new tblOrderItem();
 
-                    tblOrderItem entity = new tblOrderItem();
-                    entity.Id = Guid.NewGuid();
-                    entity.OrderId = orderItem.OrderId;
-                    entity.MovieId = orderItem.MovieId;
-                    entity.Quantity = orderItem.Quantity;
-                    entity.Cost = orderItem.Cost;
+                    row.Id = Guid.NewGuid();
+                    row.OrderId = orderItem.OrderId;
+                    row.MovieId = orderItem.MovieId;
+                    row.Quantity = orderItem.Quantity;
+                    row.Cost = orderItem.Cost;
 
-                    orderItem.Id = entity.Id;
+                    orderItem.Id = row.Id;
 
-                    dc.tblOrderItems.Add(entity);
-                    Movie movie = MovieManager.LoadById(orderItem.MovieId);
-                    movie.InStkQty -= orderItem.Quantity;
-                    MovieManager.Update(movie, rollback);
+                    dc.tblOrderItems.Add(row);
+
                     results = dc.SaveChanges();
-
 
                     if (rollback) transaction.Rollback();
                 }
 
                 return results;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            } 
+                throw ex;
+            }
         }
-
-        public static int Update(OrderItem orderItem,
-                                 bool rollback=false)
+        public int Update(OrderItem orderItem, bool rollback = false)
         {
-            int results = 0;
             try
             {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
+                int results;
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
                     IDbContextTransaction transaction = null;
                     if (rollback) transaction = dc.Database.BeginTransaction();
-                    tblOrderItem entity = dc.tblOrderItems.Where(e => e.Id == orderItem.Id).FirstOrDefault();
-                    if (entity != null)
+
+                    tblOrderItem row = dc.tblOrderItems.FirstOrDefault(oi => oi.Id == orderItem.Id);
+
+                    if (row != null)
                     {
-                        entity.OrderId = orderItem.OrderId;
-                        entity.MovieId = orderItem.MovieId;
-                        entity.Quantity = orderItem.Quantity;
-                        entity.Cost = orderItem.Cost;
+                        row.OrderId = orderItem.OrderId;
+                        row.MovieId = orderItem.MovieId;
+                        row.Quantity = orderItem.Quantity;
+                        row.Cost = orderItem.Cost;
 
                         results = dc.SaveChanges();
                         if (rollback) transaction.Rollback();
                     }
                     else
                     {
-                        throw new Exception("Row Does Not Exist.");
+                        throw new Exception("Row was not found.");
                     }
-
                 }
-
                 return results;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
-
-        public static int Delete(Guid id,
-                                 bool rollback = false)
+        public int Delete(Guid id, bool rollback = false)
         {
-            int results = 0;
             try
             {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
+                int results;
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
                     IDbContextTransaction transaction = null;
-                    if(rollback) transaction = dc.Database.BeginTransaction();
+                    if (rollback) transaction = dc.Database.BeginTransaction();
 
-                    tblOrderItem entity = dc.tblOrderItems.Where(e =>e.Id == id).FirstOrDefault();
-                    if (entity != null)
+                    tblOrderItem row = dc.tblOrderItems.FirstOrDefault(oi => oi.Id == id);
+
+                    if (row != null)
                     {
-                        dc.tblOrderItems.Remove(entity);
+                        dc.tblOrderItems.Remove(row);
                         results = dc.SaveChanges();
-                        
+                        if (rollback) transaction.Rollback();
                     }
                     else
                     {
-                        throw new Exception("Row Does Not Exist.");
+                        throw new Exception("Row was not found.");
                     }
-
-                    if (rollback) transaction.Rollback();
-                    return results;
                 }
+                return results;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
-
-        public static OrderItem LoadById(Guid id)
+        public List<OrderItem> Load()
         {
             try
             {
-                using (DVDCentralEntities dc = new DVDCentralEntities())
+                List<OrderItem> rows = new List<OrderItem>();
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
                 {
-                    tblOrderItem entity = dc.tblOrderItems.Where(e => e.Id == id).FirstOrDefault();
-                    if (entity != null)
+                    dc.tblOrderItems
+                        .ToList()
+                        .ForEach(oi => rows.Add(
+                            new OrderItem
+                            {
+                                Id = oi.Id,
+                                OrderId = oi.OrderId,
+                                MovieId = oi.MovieId,
+                                Quantity = oi.Quantity,
+                                Cost = oi.Cost
+                            }));
+
+                    return rows;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public OrderItem LoadById(Guid id)
+        {
+            try
+            {
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
+                {
+                    tblOrderItem row = dc.tblOrderItems.FirstOrDefault(oi => oi.Id == id);
+
+                    if (row != null)
                     {
                         OrderItem orderItem = new OrderItem
                         {
-                            Id = entity.Id,
-                            OrderId = entity.OrderId,
-                            MovieId = entity.MovieId,
-                            Quantity = entity.Quantity,
-                            Cost = entity.Cost
+                            Id = row.Id,
+                            OrderId = row.OrderId,
+                            MovieId = row.MovieId,
+                            Quantity = row.Quantity,
+                            Cost = row.Cost
                         };
-
                         return orderItem;
                     }
                     else
                     {
-                        throw new Exception("Row Does Not Exist");
+                        throw new Exception("Row was not found.");
                     }
                 }
-                
-            }
-            catch (Exception)
-            {
 
-                throw;
             }
-            
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
-
-        public static List<OrderItem> Load()
+        public List<OrderItem> LoadByOrderId(Guid orderId)
         {
-            List<OrderItem> list = new List<OrderItem>();
-
-            using (DVDCentralEntities dc = new DVDCentralEntities())
+            try
             {
-                (from e in dc.tblOrderItems
-                 join m in dc.tblMovies on e.MovieId equals m.Id
-                 select new
-                 {
-                     e.Id,
-                     e.OrderId,
-                     e.MovieId,
-                     e.Quantity,
-                     e.Cost,
-                     m.Title,
-                     m.ImagePath
-                 }).ToList()
-                 .ForEach( orderItem => list.Add(new OrderItem
-                 {
-                     Id = orderItem.Id,
-                     OrderId = orderItem.OrderId,
-                     MovieId =orderItem.MovieId,
-                     Quantity = orderItem.Quantity,
-                     Cost = orderItem.Cost,
-                     MovieTitle = orderItem.Title,
-                     MovieImagePath = orderItem.ImagePath
-                 }));
+                List<OrderItem> rows = new List<OrderItem>();
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
+                {
+                    var results = (from oi in dc.tblOrderItems
+                                   join m in dc.tblMovies on oi.MovieId equals m.Id
+                                   where oi.OrderId == orderId
+                                   select new
+                                   {
+                                       Id = oi.Id,
+                                       OrderId = oi.OrderId,
+                                       MovieId = oi.MovieId,
+                                       Quantity = oi.Quantity,
+                                       Cost = oi.Cost,
+                                       MovieTitle = m.Title,
+                                       ImagePath = m.ImagePath
+                                   }).ToList();
+
+                    results.ForEach(r => rows.Add(
+                         new OrderItem
+                         {
+                             Id = r.Id,
+                             OrderId = r.OrderId,
+                             MovieId = r.MovieId,
+                             Quantity = r.Quantity,
+                             Cost = r.Cost,
+                             MovieTitle = r.MovieTitle,
+                             MovieImagePath = r.ImagePath
+                         }
+                        ));
+
+                    return rows;
+                }
+
             }
-            return list;
-        }
-
-        public static List<OrderItem> LoadByOrderId(Guid orderId)
-        {
-            // I think its finished 15Oct
-
-            List<OrderItem> list = new List<OrderItem>();
-
-            using (DVDCentralEntities dc = new DVDCentralEntities())
+            catch (Exception ex)
             {
-                (from e in dc.tblOrderItems
-                 join m in dc.tblMovies on e.MovieId equals m.Id
-                 where e.OrderId == orderId
-                 select new
-                 {
-                     e.Id,
-                     e.OrderId,
-                     e.MovieId,
-                     e.Quantity,
-                     e.Cost,
-                     m.Title,
-                     m.ImagePath
-                 }).ToList()
-                 .ForEach(orderItem => list.Add(new OrderItem
-                 {
-                     Id = orderItem.Id,
-                     OrderId = orderItem.OrderId,
-                     MovieId = orderItem.MovieId,
-                     Quantity = orderItem.Quantity,
-                     Cost = orderItem.Cost,
-                     MovieTitle = orderItem.Title,
-                     MovieImagePath = orderItem.ImagePath
-                 }));
+                throw ex;
             }
-  
-            return list;
+
         }
 
 

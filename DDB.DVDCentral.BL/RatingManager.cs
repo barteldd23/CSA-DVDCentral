@@ -4,7 +4,7 @@
     {
         public RatingManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
 
-        public static int Insert(Rating rating,
+        public int Insert(Rating rating,
                                  bool rollback = false) 
         {
             try
@@ -37,7 +37,7 @@
             }  
         }
 
-        public static int Update(Rating rating,
+        public int Update(Rating rating,
                                  bool rollback = false)
         {
             try
@@ -73,7 +73,7 @@
             }
         }
 
-        public static int Delete(Guid Id,
+        public int Delete(Guid Id,
                                  bool rollback = false)
         {
             try
@@ -107,7 +107,7 @@
       
         }
 
-        public static Rating LoadById(Guid id)
+        public Rating LoadById(Guid id)
         {
             try
             {
@@ -136,7 +136,7 @@
             }
         }
 
-        public static List<Rating> Load()
+        public List<Rating> Load()
         {
             List<Rating> list = new List<Rating>();
 

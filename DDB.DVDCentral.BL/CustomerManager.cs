@@ -6,7 +6,7 @@
         {
 
         }
-        public static int Insert(Customer customer,
+        public int Insert(Customer customer,
                              bool rollback = false)
         {
             int results = 0;
@@ -46,7 +46,7 @@
             } 
         }
 
-        public static int Update(Customer customer,
+        public int Update(Customer customer,
                                  bool rollback=false)
         {
             int results = 0;
@@ -87,7 +87,7 @@
             }
         }
 
-        public static int Delete(Guid id,
+        public int Delete(Guid id,
                                  bool rollback = false)
         {
             int results = 0;
@@ -121,7 +121,7 @@
             }
         }
 
-        public static Customer LoadById(Guid id)
+        public Customer LoadById(Guid id)
         {
             try
             {
@@ -160,7 +160,7 @@
             
         }
 
-        public static List<Customer> Load()
+        public List<Customer> Load()
         {
             List<Customer> list = new List<Customer>();
 
@@ -196,7 +196,7 @@
         }
 
         // Overload to return all customers associated with this userId
-        public static List<Customer> Load(Guid userId)
+        public List<Customer> Load(Guid userId)
         {
             List<Customer> list = new List<Customer>();
 
