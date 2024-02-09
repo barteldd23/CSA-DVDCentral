@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'windows-latest'
@@ -21,11 +21,32 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
+  displayName: Build Console App
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: build
+    projects: 'DDB.DVDCentral/DDB.DVDCentral.ConsoleApp/DDB.DVDCentral.ConsoleApp.csproj'
+    arguments: '--configuration Debug' 
 
+- task: DotNetCoreCLI@2
+  displayName: Build API Project
+  inputs:
+    command: build
+    projects: 'DDB.DVDCentral/DDB.DVDCentral.API/DDB.DVDCentral.API.csproj'
+    arguments: '--configuration Debug'
 
+- task: DotNetCoreCLI@2
+  displayName: Test PL
+  inputs:
+    command: test
+    projects: 'DDB.DVDCentral.PL.Test/DDB.DVDCentral.PL.Test.csproj'
+    arguments: '--configuration Debug' 
+    
+- task: DotNetCoreCLI@2
+  displayName: Test BL
+  inputs:
+    command: test
+    projects: 'DDB.DVDCentral.BL.Test/DDB.DVDCentral.BL.Test.csproj'
+    arguments: '--configuration Debug' 
+    buildProperties: 
+   
