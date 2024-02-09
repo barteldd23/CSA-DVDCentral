@@ -1,6 +1,9 @@
 ﻿using DDB.DVDCentral.BL;
+using DDB.DVDCentral.BL.Models;
+using DDB.DVDCentral.PL2.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DDB.DVDCentral.API.Controllers
 {
@@ -8,16 +11,26 @@ namespace DDB.DVDCentral.API.Controllers
     [ApiController]
     public class RatingController : ControllerBase
     {
+
+        private readonly DbContextOptions<DVDCentralEntities> options;
+        private readonly ILogger<RatingController> logger;
+
+        public RatingController(ILogger<RatingController> logger,
+                                DbContextOptions<DVDCentralEntities> options)
+        {
+            this.options = options;
+            this.logger = logger;
+        }
         [HttpGet]
         public IEnumerable<Rating> Get()
         {
-            return RatingManager.Load();
+            return new RatingManager(options).Load();
         }
 
         [HttpGet("{id}")]
         public Rating Get(Guid id)
         {
-            return RatingManager.LoadById(id);
+            return new RatingManager(options).LoadById(id);
         }
 
         [HttpPost]
@@ -25,7 +38,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                int results = RatingManager.Insert(rating);
+                int results = new RatingManager(options).Insert(rating);
                 return Ok(results);
             }
             catch (Exception ex)
@@ -39,7 +52,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                int results = RatingManager.Update(rating);
+                int results = new RatingManager(options).Update(rating);
                 return Ok(results);
             }
             catch (Exception ex)
@@ -53,7 +66,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                int results = RatingManager.Delete(id);
+                int results = new RatingManager(options).Delete(id);
                 return Ok(results);
             }
             catch (Exception ex)
