@@ -30,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.DVDCentral.MigrationHan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.DVDCentral.WPFUI", "DDB.DVDCentral.WPFUI\DDB.DVDCentral.WPFUI.csproj", "{EAE63332-4988-4C41-B765-229EE9B3E53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDB.DVDCentral.ConsoleApp", "DDB.DVDCentral.ConsoleApp\DDB.DVDCentral.ConsoleApp.csproj", "{CD90B4A1-BD87-41FC-8D8D-A571CB9BA3AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.DVDCentral.ConsoleApp", "DDB.DVDCentral.ConsoleApp\DDB.DVDCentral.ConsoleApp.csproj", "{CD90B4A1-BD87-41FC-8D8D-A571CB9BA3AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,11 +65,9 @@ Global
 		{7ABDE50F-18D2-40FE-8015-FFEC0EF40FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ABDE50F-18D2-40FE-8015-FFEC0EF40FCA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5574AA24-531A-4CB2-8698-596BF7A4C3F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5574AA24-531A-4CB2-8698-596BF7A4C3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5574AA24-531A-4CB2-8698-596BF7A4C3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5574AA24-531A-4CB2-8698-596BF7A4C3F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1F24D390-5B97-4543-9A55-E57416B83C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F24D390-5B97-4543-9A55-E57416B83C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F24D390-5B97-4543-9A55-E57416B83C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F24D390-5B97-4543-9A55-E57416B83C8B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{382FC510-FF10-452D-997E-BAAA4D889520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
