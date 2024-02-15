@@ -1,24 +1,20 @@
 ﻿using DDB.DVDCentral.BL;
 using DDB.DVDCentral.BL.Models;
 using DDB.DVDCentral.PL2.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DDB.DVDCentral.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FormatController : ControllerBase
+    public class DirectorController : ControllerBase
     {
         private readonly DbContextOptions<DVDCentralEntities> options;
-        private readonly ILogger<FormatController> logger;
+        private readonly ILogger<DirectorController> logger;
 
-        public FormatController(ILogger<FormatController> logger,
+        public DirectorController(ILogger<DirectorController> logger,
                                 DbContextOptions<DVDCentralEntities> options)
         {
             this.options = options;
@@ -26,27 +22,27 @@ namespace DDB.DVDCentral.API.Controllers
             logger.LogWarning("I was here");
         }
 
-        // GET: api/<FormatController>
+        // GET: api/<DirectorController>
         [HttpGet]
-        public IEnumerable<Format> Get()
+        public IEnumerable<Director> Get()
         {
-            return new FormatManager(options).Load();
+            return new DirectorManager(options).Load();
         }
 
-        // GET api/<FormatController>/5
+        // GET api/<DirectorController>/5
         [HttpGet("{id}")]
-        public Format Get(Guid id)
+        public Director Get(Guid id)
         {
-            return new FormatManager(options).LoadById(id);
+            return new DirectorManager(options).LoadById(id);
         }
 
-        // POST api/<FormatController>
+        // POST api/<DirectorController>
         [HttpPost("{rollback?}")]
-        public int Post([FromBody] Format format, bool rollback = false)
+        public int Post([FromBody] Director director, bool rollback = false)
         {
             try
             {
-                return new FormatManager(options).Insert(format, rollback);
+                return new DirectorManager(options).Insert(director, rollback);
             }
             catch (Exception)
             {
@@ -55,13 +51,13 @@ namespace DDB.DVDCentral.API.Controllers
             }
         }
 
-        // PUT api/<FormatController>/5
+        // PUT api/<DirectorController>/5
         [HttpPut("{id}/{rollback?}")]
-        public int Put(Guid id, [FromBody] Format format, bool rollback = false)
+        public int Put(Guid id, [FromBody] Director director, bool rollback = false)
         {
             try
             {
-                return new FormatManager(options).Update(format, rollback);
+                return new DirectorManager(options).Update(director, rollback);
             }
             catch (Exception)
             {
@@ -70,13 +66,13 @@ namespace DDB.DVDCentral.API.Controllers
             }
         }
 
-        // DELETE api/<FormatController>/5
+        // DELETE api/<DirectorController>/5
         [HttpDelete("{id}/{rollback?}")]
         public int Delete(Guid id, bool rollback = false)
         {
             try
             {
-                return new FormatManager(options).Delete(id, rollback);
+                return new DirectorManager(options).Delete(id, rollback);
             }
             catch (Exception)
             {
