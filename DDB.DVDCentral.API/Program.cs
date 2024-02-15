@@ -1,7 +1,7 @@
 using DDB.DVDCentral.PL2.Data;
 using Microsoft.EntityFrameworkCore;
 
-internal class Program
+public class Program
 {
     private static void Main(string[] args)
     {

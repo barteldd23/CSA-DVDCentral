@@ -1,0 +1,12 @@
+global using Microsoft.VisualStudio.TestTools.UnitTesting;
+global using Microsoft.VisualStudio.TestPlatform.TestHost;
+global using Newtonsoft.Json.Linq;
+global using Newtonsoft.Json;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Reflection;
+global using System.Text;
+global using System.Threading.Tasks;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.Extensions.Hosting;
