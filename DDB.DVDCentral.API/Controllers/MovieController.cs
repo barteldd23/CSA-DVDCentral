@@ -23,6 +23,10 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         // GET: api/<MovieController>
+        /// <summary>
+        /// Returns a list of movies.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Movie> Get()
         {
@@ -30,6 +34,11 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         // GET api/<MovieController>/5
+        /// <summary>
+        /// Get a particular movie by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public Movie Get(Guid id)
         {
@@ -37,6 +46,12 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         // POST api/<MovieController>
+        /// <summary>
+        /// Insert a movie
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
         [HttpPost("{rollback?}")]
         public int Post([FromBody] Movie movie, bool rollback = false)
         {
@@ -52,6 +67,13 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         // PUT api/<MovieController>/5
+        /// <summary>
+        /// Update a movie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="movie"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
         [HttpPut("{id}/{rollback?}")]
         public int Put(Guid id, [FromBody] Movie movie, bool rollback = false)
         {
@@ -67,6 +89,12 @@ namespace DDB.DVDCentral.API.Controllers
         }
 
         // DELETE api/<MovieController>/5
+        /// <summary>
+        /// Delete a movie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
         [HttpDelete("{id}/{rollback?}")]
         public int Delete(Guid id, bool rollback = false)
         {

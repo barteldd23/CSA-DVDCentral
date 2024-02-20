@@ -23,7 +23,7 @@ namespace DDB.DVDCentral.API.Test
         [TestMethod]
         public async Task DeleteTestAsync()
         {
-            await base.DeleteTestAsync<Format>(new KeyValuePair<string, string>("Description", "DVD"));
+            await base.DeleteTestAsync<Format>(new KeyValuePair<string, string>("Description", "Other"));
         }
 
         [TestMethod]

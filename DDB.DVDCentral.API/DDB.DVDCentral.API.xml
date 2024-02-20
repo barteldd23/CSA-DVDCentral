@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DDB.DVDCentral.API</name>
+    </assembly>
+    <members>
+        <member name="M:DDB.DVDCentral.API.Controllers.MovieController.Get">
+            <summary>
+            Returns a list of movies.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DDB.DVDCentral.API.Controllers.MovieController.Get(System.Guid)">
+            <summary>
+            Get a particular movie by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DDB.DVDCentral.API.Controllers.MovieController.Post(DDB.DVDCentral.BL.Models.Movie,System.Boolean)">
+            <summary>
+            Insert a movie
+            </summary>
+            <param name="movie"></param>
+            <param name="rollback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DDB.DVDCentral.API.Controllers.MovieController.Put(System.Guid,DDB.DVDCentral.BL.Models.Movie,System.Boolean)">
+            <summary>
+            Update a movie
+            </summary>
+            <param name="id"></param>
+            <param name="movie"></param>
+            <param name="rollback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DDB.DVDCentral.API.Controllers.MovieController.Delete(System.Guid,System.Boolean)">
+            <summary>
+            Delete a movie
+            </summary>
+            <param name="id"></param>
+            <param name="rollback"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -16,7 +16,7 @@
                 {
                     var results = (from o in dc.tblOrders
                                        //join c in dc.tblCustomers on o.CustomerId equals c.Id
-                                   join u in dc.tblUsers on o.UserId equals u.Id
+                                   //join u in dc.tblUsers on o.UserId equals u.Id
                                    where o.CustomerId == customerId || customerId == null
                                    select new
                                    {
@@ -24,11 +24,11 @@
                                        CustomerId = o.CustomerId,
                                        CustomerFisrtName = o.Customer.FirstName,
                                        CustomerLastName = o.Customer.LastName,
-                                       UserName = u.UserName,
+                                       UserName = o.User.UserName,
                                        OrderDate = o.OrderDate,
                                        UserId = o.UserId,
-                                       UserFirstName = u.FirstName,
-                                       UserLastName = u.LastName,
+                                       UserFirstName = o.User.FirstName,
+                                       UserLastName = o.User.LastName,
                                        ShipDate = o.ShipDate
                                    }
                                   ).ToList();
@@ -138,6 +138,7 @@
                 row.OrderDate = DateTime.Now;
                 row.UserId = order.UserId;
                 row.ShipDate = row.OrderDate.AddDays(3);
+                row.OrderItems = new List<tblOrderItem>();
 
                 foreach (OrderItem item in order.OrderItems)
                 {
@@ -150,11 +151,19 @@
                     oirow.Quantity = item.Quantity;
                     oirow.Cost = item.Cost;
 
+                    // 2nd most important thing
+                    // setting the parent on the child
+
                     item.Id = row.Id;
+                    oirow.Order = row;
+                    // Add to the OrderItems and it will
+                    // automatically be put in the database
+
+                    row.OrderItems.Add(oirow);
 
                 }
 
-                return base.Insert(row, rollback);
+                return Insert(row, rollback);
             }
             catch (Exception ex)
             {
