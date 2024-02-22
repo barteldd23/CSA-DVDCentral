@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BDF.Bingo.UI": {
+      "commandName": "Project",
+      "commandLineArgs": "Foote"
+    }
+  }
+}
