@@ -11,8 +11,9 @@ namespace DDB.DVDCentral.API.Controllers
     [ApiController]
     public class DirectorController : ControllerBase
     {
-        private readonly DbContextOptions<DVDCentralEntities> options;
         private readonly ILogger<DirectorController> logger;
+        private readonly DbContextOptions<DVDCentralEntities> options;
+        
 
         public DirectorController(ILogger<DirectorController> logger,
                                 DbContextOptions<DVDCentralEntities> options)
