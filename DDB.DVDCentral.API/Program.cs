@@ -1,3 +1,4 @@
+using DDB.DVDCentral.API.Hubs;
 using DDB.DVDCentral.PL2.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -9,6 +10,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+
+        builder.Services.AddSignalR()
+            .AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+            });
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,8 +37,14 @@ public class Program
             var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile) ;
             c.IncludeXmlComments(xmlpath);
+
+           // var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
+           //c.IncludeXmlComments(xmlpath);
         });
 
+
+        
 
         // Add Connection information
         builder.Services.AddDbContextPool<DVDCentralEntities>(options =>
@@ -50,10 +63,17 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseRouting();
         app.UseAuthorization();
 
-        app.MapControllers();
+        //app.MapControllers();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapHub<BingoHub>("/bingoHub");
+        });
+
 
         app.Run();
     }
