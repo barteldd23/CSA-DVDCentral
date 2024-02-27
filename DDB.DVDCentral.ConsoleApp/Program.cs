@@ -59,7 +59,7 @@ internal class Program
         string user = "Bartel";
         //string hubAddress = "https://fvtcdp.azurewebsites.net/GameHub";
         //string hubAddress = "https://dvdcentralapi-120212964.azurewebsites.net/BingoHub";
-        string hubAddress = "https://localhost:7051/BingoHub";
+        string hubAddress = "https://localhost:7143/BingoHub";
 
         string operation = DrawMenu();
 
