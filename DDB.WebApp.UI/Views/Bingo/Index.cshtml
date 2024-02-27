@@ -1,0 +1,99 @@
+﻿@model int[]
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+// Added a new comments
+<div class="row col-md-12">
+    <div class="row col-md-8">
+        @{
+            var id = "bingo";
+            @for (int i = 0; i < 75; i++)
+            {
+                id = "bingo" + i;
+                <div id="@id" class="col-md-1 border text-center imagepropsm">
+                    <a id="@id">@(i + 1)</a>
+                </div>
+            }
+        }
+    </div>
+    <div class="col-md-4">
+        <div class="container">
+            <input type="text" id="messageInput" />
+            <input type="button" id="sendmessage" value="Send" />
+            <ul id="discussion"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var bingo = document.getElementsByClassName('bingo');
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl('https://fvtcdp.azurewebsites.net/BingoHub')
+            .build();
+        // Added a new comment
+        // Create a function that the hub can call to broadcast messages.
+        connection.on('receivemessage', function (name, message) {
+            if (message == "newgame") {
+                console.log("new game");
+                for (var i = 0; i < 75; i++) {
+                    var id = "bingo" + i;
+                    //document.getElementById(id).innerHTML = (i+1)+":0";
+                    document.getElementById(id).style.backgroundColor = 'lightblue';
+                }
+            }
+            else {
+                console.log(name + ": " + message);
+
+                if (name == "Caller") {
+                    var index = eval(message) - 1;
+                    //document.getElementById('bingo' + index).innerHTML = message+":1";
+                    document.getElementById('bingo' + index).style.backgroundColor = 'lightyellow';
+                    console.log('Setting bingo' + message + ' to lightyellow');
+                }
+
+                var liElement = document.createElement('li');
+                liElement.innerHTML = '<strong>' + name + '</strong>:&nbsp;&nbsp;' + message;
+                document.getElementById('discussion').appendChild(liElement);
+            }
+        });
+
+        // Transport fallback functionality is now built into start.
+        connection.start()
+            .then(function () {
+                console.log('connection started');
+
+                document.getElementById('sendmessage').addEventListener('click', function (event) {
+                    // Call the Send method on the hub.
+                    connection.invoke('sendmessage', name, messageInput.value);
+                    //connection.invoke('sendmessagetogroup', "Room 2", name, messageInput.value);
+
+                    // Clear text box and reset focus for next comment.
+                    messageInput.value = '';
+                    messageInput.focus();
+                    event.preventDefault();
+                });
+
+                var elements = document.getElementsByClassName('bingo');
+                for (var i = 0; i < elements.length; i++) {
+                    gameValues = gameState.split('|');
+                    if (gameValues[i] != 'E')
+                        elements[i].style.backgroundColor = 'lightyellow';
+                    else
+                        elements[i].style.backgroundColor = 'lightblue';
+
+                }
+
+            })
+            .catch(error => {
+                console.error(error.message);
+            });
+    });
+</script>
+
+
+
