@@ -18,7 +18,9 @@ internal class Program
     private static void Main(string[] args)
     {
         string user = "Bartel";
-        string hubAddress = "https://fvtcdp.azurewebsites.net/GameHub";
+    
+        //string hubAddress = "https://fvtcdp.azurewebsites.net/GameHub";
+        string hubAddress = "https://localhost:7143/BingoHub";
         string operation = DrawMenu();
 
         var signalRConnection = new SignalRConnection(hubAddress);

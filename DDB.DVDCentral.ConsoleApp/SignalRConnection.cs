@@ -13,11 +13,6 @@ namespace DDB.DVDCentral.ConsoleApp
         HubConnection _connection;
         string user;
 
-        public SignalRConnection(string hubAddress)
-        {
-            this.hubAddress = hubAddress;
-        }
-
         public void Start()
         {
             _connection = new HubConnectionBuilder()
@@ -27,6 +22,10 @@ namespace DDB.DVDCentral.ConsoleApp
             _connection.On<string, string>("ReceiveMessage", (s1, s2) => OnSend(s1, s2));
 
             _connection.StartAsync();
+        }
+        public SignalRConnection(string hubAddress)
+        {
+            this.hubAddress = hubAddress;
         }
 
         private void OnSend(string user, string message)
@@ -38,6 +37,7 @@ namespace DDB.DVDCentral.ConsoleApp
         {
             Start();
             string message = user + " Connected";
+
             try
             {
                 _connection.InvokeAsync("SendMessage", "System", message);
