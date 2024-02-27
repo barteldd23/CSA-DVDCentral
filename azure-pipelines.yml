@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- main
+- master
 
 pool:
   vmImage: 'windows-latest'
@@ -25,14 +25,14 @@ steps:
   displayName: Build Console App
   inputs:
     command: build
-    projects: 'DDB.DVDCentral/DDB.DVDCentral.ConsoleApp/DDB.DVDCentral.ConsoleApp.csproj'
+    projects: 'DDB.DVDCentral.ConsoleApp/DDB.DVDCentral.ConsoleApp.csproj'
     arguments: '--configuration Debug' 
 
 - task: DotNetCoreCLI@2
   displayName: Build API Project
   inputs:
     command: build
-    projects: 'DDB.DVDCentral/DDB.DVDCentral.API/DDB.DVDCentral.API.csproj'
+    projects: 'DDB.DVDCentral.API/DDB.DVDCentral.API.csproj'
     arguments: '--configuration Debug'
 
 - task: DotNetCoreCLI@2
@@ -41,12 +41,22 @@ steps:
     command: test
     projects: 'DDB.DVDCentral.PL.Test/DDB.DVDCentral.PL.Test.csproj'
     arguments: '--configuration Debug' 
-    
+
 - task: DotNetCoreCLI@2
   displayName: Test BL
   inputs:
     command: test
     projects: 'DDB.DVDCentral.BL.Test/DDB.DVDCentral.BL.Test.csproj'
-    arguments: '--configuration Debug' 
-    buildProperties: 
-   
+    arguments: '--configuration $(BuildConfiguration) --collect "XPlat Code coverage" -- RunConfiguration.DisableAppDomain=true'
+    
+- script: 'dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.19'  
+  displayName: 'Install ReportGenerator tool'  
+  
+- script: 'reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"'  
+  displayName: 'Create reports'  
+
+- task: PublishCodeCoverageResults@1  
+  displayName: 'Publish code coverage'  
+  inputs:  
+    codeCoverageTool: Cobertura  
+    summaryFileLocation: '$(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml'     
