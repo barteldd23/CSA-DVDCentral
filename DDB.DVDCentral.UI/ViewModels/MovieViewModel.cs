@@ -12,10 +12,6 @@
 
         public MovieViewModel()
         {
-            Genres = GenreManager.Load();
-            Directors = DirectorManager.Load();
-            Ratings = RatingManager.Load();
-            Formats = FormatManager.Load();
             Movie = new Movie();
         }
 
@@ -23,12 +19,6 @@
         {
             try
             {
-                Genres = GenreManager.Load();
-                Directors = DirectorManager.Load();
-                Ratings = RatingManager.Load();
-                Formats = FormatManager.Load();
-                Movie = MovieManager.LoadById(id);
-                GenreIds = MovieGenreManager.GetGenres(id);
             }
             catch (Exception)
             {
