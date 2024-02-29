@@ -6,7 +6,7 @@ namespace DDB.DVDCentral.UI.ViewComponents
     {
         public IViewComponentResult Invoke()
         {
-            return View(GenreManager.Load());
+            return View();
         }
     }
 }

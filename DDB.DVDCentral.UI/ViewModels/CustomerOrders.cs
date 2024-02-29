@@ -7,8 +7,6 @@
 
         public CustomerOrders(int id) 
         {
-            Order = OrderManager.LoadById(id);
-            Customer = CustomerManager.LoadById(Order.CustomerId);
         }
     }
 }
