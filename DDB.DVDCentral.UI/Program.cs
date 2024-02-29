@@ -17,6 +17,8 @@ builder.Services.AddSession(options =>
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7143/api/") });
+
 var app = builder.Build();
 
 

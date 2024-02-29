@@ -7,17 +7,5 @@
 
 <div>
     <ul>
-        @foreach (var genre in Model)
-        {
-            <li>
-                <a asp-controller="Movie"
-                   asp-action="Browse"
-                   asp-route-id="@genre.Id">@genre.Description</a>
-            </li>
-        }
-        <li>
-            <a asp-controller="Movie"
-               asp-action="Index">All Movies</a>
-        </li>
     </ul>
 </div>
