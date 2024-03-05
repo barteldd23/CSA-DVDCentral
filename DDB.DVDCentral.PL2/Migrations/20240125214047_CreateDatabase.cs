@@ -414,6 +414,37 @@ namespace DDB.DVDCentral.PL2.Migrations
                 name: "IX_tblMovieGenre_MovieId",
                 table: "tblMovieGenre",
                 column: "MovieId");
+
+            migrationBuilder.Sql(@"CREATE PROCEDURE [dbo].[spGetMovies]
+                AS
+                select m.Id, m.RatingId, m.DirectorId, m.FormatId, m.Cost, m.Title, m.Description, m.Quantity,
+                r.Description RatingDescription,
+                f.Description FormatDescription,
+                d.FirstName, d.LastName
+                from tblMovie m
+                inner join tblRating r on m.RatingId = r.Id
+                inner join tblFormat f on m.FormatId = f.Id
+                inner join tblDirector d on m.DirectorId = d.Id
+ 
+                RETURN 0");
+
+            migrationBuilder.Sql(@"CREATE PROCEDURE [dbo].[spGetMoviesByGenre]
+                     @GenreName VARCHAR(20)
+                AS
+                     select m.Id, m.RatingId, m.DirectorId, m.FormatId, m.Cost, m.Title, m.Description, m.Quantity,
+                     r.Description RatingDescription,
+                     f.Description FormatDescription,
+                     d.FirstName, d.LastName
+                     from tblMovie m
+                     inner join tblRating r on m.RatingId = r.Id
+                     inner join tblFormat f on m.FormatId = f.Id
+                     inner join tblDirector d on m.DirectorId = d.Id
+                     inner join tblMovieGenre mg on m.Id = mg.MovieId
+                     inner join tblGenre g on mg.GenreId = g.Id
+                     WHERE g.Description Like '%' + @GenreName + '%'
+                RETURN 0
+                ");
+
         }
 
         /// <inheritdoc />

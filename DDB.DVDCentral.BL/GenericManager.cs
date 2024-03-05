@@ -27,6 +27,23 @@
             }
         }
 
+        public List<T> Load(string storedproc)
+        {
+            try
+            {
+                return new DVDCentralEntities(options)
+                    .Set<T>()
+                    .FromSqlRaw($"exec {storedproc}")
+                    .ToList<T>();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public T LoadById(Guid id)
         {
             try

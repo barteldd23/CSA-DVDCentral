@@ -5,6 +5,15 @@ namespace DDB.DVDCentral.BL.Test
     public class utMovie : utBase
     {
         [TestMethod]
+        public void LoadSPTest()
+        {
+            var movies = new MovieSPManager(options).Load();
+            int expected = 7;
+
+            Assert.AreEqual(expected, movies.Count);
+        }
+
+        [TestMethod]
         public void LoadTest()
         {
             List<Movie> movies = new MovieManager(options).Load();
