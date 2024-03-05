@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.DVDCentral.PL", "DDB.DV
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E5C92876-3FBA-46DC-9D10-69BAA8CA7013}"
 	ProjectSection(SolutionItems) = preProject
+		storedProcedures.txt = storedProcedures.txt
 		TextFile.txt = TextFile.txt
 	EndProjectSection
 EndProject
@@ -36,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.DVDCentral.API.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BDF.Bingo.UI", "BDF.Bingo.UI\BDF.Bingo.UI.csproj", "{9B301A7B-FE32-4C53-A631-5348BB6F5DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDB.WebApp.UI", "DDB.WebApp.UI\DDB.WebApp.UI.csproj", "{44AF4A3F-FE74-41A7-BE06-7336F9B7D889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDB.WebApp.UI", "DDB.WebApp.UI\DDB.WebApp.UI.csproj", "{44AF4A3F-FE74-41A7-BE06-7336F9B7D889}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BDF.Utility", "BDF.Utility\BDF.Utility.csproj", "{25B4881F-B37D-4F8E-ABD1-48B5716EA317}"
 EndProject

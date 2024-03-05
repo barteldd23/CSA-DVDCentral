@@ -1,9 +1,44 @@
 
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
 namespace DDB.DVDCentral.PL.Test
 {
     [TestClass]
     public class utMovie : utBase<tblMovie>
     {
+        [TestMethod]
+        public void LoadTestSP()
+        {
+            var results = dc.Set<spGetMoviesResult>().FromSqlRaw("exec spGetMovies").ToList();
+            Assert.AreEqual(7, results.Count);
+        }
+
+        [TestMethod]
+        public void LoadByGenreTestSP()
+        {
+            int expected = 2;
+
+            var parameter1 = new SqlParameter
+            {
+                ParameterName = "GenreName",
+                SqlDbType = System.Data.SqlDbType.VarChar,
+                Value = "Sc"
+            };
+
+            List<spGetMoviesResult> results = dc.Set<spGetMoviesResult>().FromSqlRaw("exec spGetMoviesByGenre @GenreName", parameter1).ToList();
+
+            string title = results[1].Title;
+
+            //foreach(var r in results)
+            //{
+            //    title = r.Title;
+            //}
+
+            Assert.AreEqual(expected, results.Count);
+            Assert.AreEqual("Jaws", title);
+        }
+
         [TestMethod]
         public void LoadTest()
         {

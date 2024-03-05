@@ -368,6 +368,10 @@ namespace DDB.DVDCentral.PL2.Data
                     .HasForeignKey(d => d.RatingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_tblMovie_RatingId");
+
+                // Include Stored Procedure
+                modelBuilder.Entity<spGetMoviesResult>().HasNoKey();
+
             });
 
 
