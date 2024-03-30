@@ -33,12 +33,7 @@ namespace DDB.DVDCentral.BL.Test
             //Guid genreId = new GenreManager(options).Load().FirstOrDefault().Id;
             Assert.IsTrue(new MovieGenreManager(options).Delete(movie.Id, genreId, true) > 0);
         }
-        [TestMethod]
-        public void utReportTest()
-        {
-            var movies = new MovieManager(options).Load();
-            Excel.Export("movies.xlsx", MovieManager.ConvertData(movies));
-        }
+        
 
     }
 }

@@ -1,6 +1,9 @@
 using DDB.DVDCentral.API.Hubs;
 using DDB.DVDCentral.PL2.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Ui.MsSqlServerProvider;
+using Serilog.Ui.Web;
 using System.Reflection;
 
 public class Program
@@ -53,7 +56,36 @@ public class Program
             options.UseLazyLoadingProxies();
         });
 
+
+        //Reporting plumbing stuff:
+        string connection = builder.Configuration.GetConnectionString("DatabaseConnection");
+        builder.Services.AddSerilogUi(options =>
+        {
+            options.UseSqlServer(connection, "Logs");
+        });
+
+        var configsettings = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configsettings)
+            .CreateLogger();
+
+        builder.Services
+            .AddLogging(c => c.AddDebug())
+            .AddLogging(c => c.AddSerilog())
+            .AddLogging(c => c.AddEventLog())
+            .AddLogging(c => c.AddConsole());
+
+
+
         var app = builder.Build();
+
+        //More Logging UI stuff
+        app.UseSerilogUi(options => { options.RoutePrefix = "logs"; });
+
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment() || true)

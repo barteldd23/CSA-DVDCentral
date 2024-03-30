@@ -1,9 +1,20 @@
 
+using DDB.Reporting;
+
 namespace DDB.DVDCentral.BL.Test
 {
     [TestClass]
     public class utMovie : utBase
     {
+        [TestMethod]
+        public void utReportTest()
+        {
+            var movies = new MovieManager(options).Load();
+            string[] columns = { "Title", "DirectorFullName", "FormatDescription", "RatingDescription", "InStkQty" };
+            var data = MovieManager.ConvertData<Movie>(movies, columns);
+            Excel.Export("movies.xlsx", data);
+        }
+
         [TestMethod]
         public void LoadSPTest()
         {

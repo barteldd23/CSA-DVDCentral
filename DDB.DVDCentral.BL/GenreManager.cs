@@ -1,8 +1,12 @@
-﻿namespace DDB.DVDCentral.BL
+﻿using Microsoft.Extensions.Logging;
+
+namespace DDB.DVDCentral.BL
 {
     public class GenreManager : GenericManager<tblGenre>
     {
         public GenreManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+
+        public GenreManager(ILogger logger, DbContextOptions<DVDCentralEntities> options) : base(logger,options) { }
 
         public List<Genre> Load(Guid? movieId = null)
         {
