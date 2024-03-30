@@ -23,4 +23,5 @@ public class tblCustomer : IEntity
 
     public Guid UserId { get; set; }
     public virtual ICollection<tblOrder> Orders { get; set; }
+    public string SortField { get { return LastName; } }
 }

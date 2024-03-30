@@ -9,4 +9,5 @@ public class tblGenre : IEntity
 
     public string Description { get; set; } = null!;
     public virtual ICollection<tblMovieGenre> tblMovieGenres { get; set; }
+    public string SortField { get { return Description; } }
 }

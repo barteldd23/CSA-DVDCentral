@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 
 namespace DDB.DVDCentral.PL2.Entities;
@@ -11,4 +12,5 @@ public class tblDirector : IEntity
 
     public string LastName { get; set; } = null!;
     public virtual ICollection<tblMovie> tblMovies { get; set; }
+    public string SortField { get { return LastName; } }
 }

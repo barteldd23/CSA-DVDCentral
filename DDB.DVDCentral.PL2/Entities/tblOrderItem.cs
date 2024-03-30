@@ -16,4 +16,5 @@ public class tblOrderItem : IEntity
     public double Cost { get; set; }
     public virtual tblMovie Movie { get; set; }
     public virtual tblOrder Order { get; set; }
+    public string SortField { get { return Movie.Title; } }
 }

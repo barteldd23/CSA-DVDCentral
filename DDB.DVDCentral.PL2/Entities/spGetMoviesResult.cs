@@ -28,5 +28,6 @@ namespace DDB.DVDCentral.PL2.Entities
         public string FormatDescription { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string SortField { get { return Title; } }
     }
 }

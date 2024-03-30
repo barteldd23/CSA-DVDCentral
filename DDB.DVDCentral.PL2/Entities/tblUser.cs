@@ -14,4 +14,5 @@ public class tblUser : IEntity
     public string LastName { get; set; } = null!;
 
     public string Password { get; set; } = null!;
+    public string SortField { get { return LastName; } }
 }
