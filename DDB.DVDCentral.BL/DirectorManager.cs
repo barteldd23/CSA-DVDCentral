@@ -1,10 +1,17 @@
 ﻿
+
+using Microsoft.Extensions.Logging;
+
 namespace DDB.DVDCentral.BL
 {
     public class DirectorManager : GenericManager<tblDirector>
     {
 
         public DirectorManager(DbContextOptions<DVDCentralEntities> options) : base(options)
+        {
+
+        }
+        public DirectorManager(ILogger logger,DbContextOptions<DVDCentralEntities> options) : base(logger,options)
         {
 
         }
@@ -16,11 +23,11 @@ namespace DDB.DVDCentral.BL
             {
                 tblDirector row = new tblDirector { FirstName = director.FirstName, LastName = director.LastName };
                 director.Id = row.Id;
-                return base.Insert(row, rollback);
+                return base.Insert(row, e => e.LastName == director.LastName, rollback);
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
         public int Update(Director director, bool rollback = false)

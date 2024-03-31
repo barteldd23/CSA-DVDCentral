@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace DDB.DVDCentral.BL
 {
@@ -98,7 +99,8 @@ namespace DDB.DVDCentral.BL
             }
         }
 
-        public int Insert(T entity, bool rollback = false)
+        public int Insert(T entity,
+                          bool rollback = false)
         {
             try
             {
@@ -122,6 +124,52 @@ namespace DDB.DVDCentral.BL
                     results = dc.SaveChanges();
 
                     if (rollback) dbTransaction.Rollback();
+
+                }
+
+                return results;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public int Insert(T entity,
+                          Expression<Func<T, bool>> predicate = null,
+                          bool rollback = false)
+        {
+            try
+            {
+                int results = 0;
+                using (DVDCentralEntities dc = new DVDCentralEntities(options))
+                {
+                    // Check if genre already exists - do not allow ....
+                    //bool inUse = dc.tblGenres.Any(e => e.Description.Trim().ToUpper() == entity.Description.Trim().ToUpper());
+
+                    //if (inUse && !rollback)
+                    //{
+                    //    throw new Exception("This entity already exists.");
+                    //}
+
+                    if ( (predicate == null) || ((predicate != null) && (!dc.Set<T>().Any(predicate))))
+                    {
+                        IDbContextTransaction dbTransaction = null;
+                        if (rollback) dbTransaction = dc.Database.BeginTransaction();
+
+                        entity.Id = Guid.NewGuid();
+
+                        dc.Set<T>().Add(entity);
+                        results = dc.SaveChanges();
+
+                        if (rollback) dbTransaction.Rollback(); 
+                    }
+                    else
+                    {
+                        if (logger != null) logger.LogWarning("Row already exists. {UserId}", "dbartel");
+                        throw new Exception("Row already exists.");
+                    }
 
                 }
 

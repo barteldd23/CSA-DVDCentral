@@ -25,16 +25,25 @@ namespace DDB.DVDCentral.API.Controllers
 
         // GET: api/<DirectorController>
         [HttpGet]
-        public IEnumerable<Director> Get()
+        public  IEnumerable<Director> Get()
         {
-            return new DirectorManager(options).Load();
+            try
+            {
+                logger.LogWarning("Director-->");
+                return new DirectorManager(logger, options).Load();
+            }
+            catch (Exception ex)
+            {
+                return null;
+               // return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         // GET api/<DirectorController>/5
         [HttpGet("{id}")]
         public Director Get(Guid id)
         {
-            return new DirectorManager(options).LoadById(id);
+            return new DirectorManager(logger, options).LoadById(id);
         }
 
         // POST api/<DirectorController>
@@ -43,7 +52,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                return new DirectorManager(options).Insert(director, rollback);
+                return new DirectorManager(logger, options).Insert(director, rollback);
             }
             catch (Exception)
             {
@@ -58,7 +67,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                return new DirectorManager(options).Update(director, rollback);
+                return new DirectorManager(logger, options).Update(director, rollback);
             }
             catch (Exception)
             {
@@ -73,7 +82,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                return new DirectorManager(options).Delete(id, rollback);
+                return new DirectorManager(logger, options).Delete(id, rollback);
             }
             catch (Exception)
             {

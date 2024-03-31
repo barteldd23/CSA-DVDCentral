@@ -93,7 +93,7 @@ namespace DDB.DVDCentral.BL
             {
                 tblGenre row = new tblGenre { Description = genre.Description };
                 genre.Id = row.Id;
-                return base.Insert(row, rollback);
+                return base.Insert(row, e => e.Description == genre.Description, rollback);
 
             }
             catch (Exception)
