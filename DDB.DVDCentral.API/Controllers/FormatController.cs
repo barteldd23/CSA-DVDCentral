@@ -28,9 +28,16 @@ namespace DDB.DVDCentral.API.Controllers
 
         // GET: api/<FormatController>
         [HttpGet]
-        public IEnumerable<Format> Get()
+        public async Task<ActionResult<IEnumerable<Format>>> Get()
         {
-            return new FormatManager(options).Load();
+            try
+            {
+                return Ok(await new FormatManager(logger, options).Load1());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         // GET api/<FormatController>/5

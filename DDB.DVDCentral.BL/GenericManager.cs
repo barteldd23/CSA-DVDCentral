@@ -47,6 +47,29 @@ namespace DDB.DVDCentral.BL
             return data;
         }
 
+        public async Task<List<T>> Load1()
+        {
+            try
+            {
+                if (logger != null) logger.LogWarning($"Get {typeof(T).Name}s");
+                var rows = new DVDCentralEntities(options)
+                    .Set<T>()
+                    .ToListAsync<T>()
+                    .ConfigureAwait(false);
+
+                //.OrderBy(x => x.SortField)
+                //.ToList<T>();
+
+                return await rows;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public List<T> Load()
         {
             try

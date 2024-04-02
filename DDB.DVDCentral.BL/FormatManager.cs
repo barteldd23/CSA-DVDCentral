@@ -1,8 +1,11 @@
-﻿namespace DDB.DVDCentral.BL
+﻿using Microsoft.Extensions.Logging;
+
+namespace DDB.DVDCentral.BL
 {
     public class FormatManager : GenericManager<tblFormat>
     {
         public FormatManager(DbContextOptions<DVDCentralEntities> options) : base(options) { }
+        public FormatManager(ILogger logger, DbContextOptions<DVDCentralEntities> options) : base(logger, options) { }
 
         public int Insert(Format format, bool rollback = false)
         {
