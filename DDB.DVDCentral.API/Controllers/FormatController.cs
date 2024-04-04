@@ -32,7 +32,7 @@ namespace DDB.DVDCentral.API.Controllers
         {
             try
             {
-                return Ok(await new FormatManager(logger, options).Load1());
+                return Ok(await new FormatManager(logger, options).LoadAsync());
             }
             catch (Exception ex)
             {
@@ -49,15 +49,15 @@ namespace DDB.DVDCentral.API.Controllers
 
         // POST api/<FormatController>
         [HttpPost("{rollback?}")]
-        public int Post([FromBody] Format format, bool rollback = false)
+        public async Task<ActionResult> Post([FromBody] Format format, bool rollback = false)
         {
             try
             {
-                return new FormatManager(options).Insert(format, rollback);
+                await new FormatManager(options).InsertAsync(format, rollback);
+                return Ok(format.Id);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

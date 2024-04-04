@@ -22,6 +22,21 @@ namespace DDB.DVDCentral.BL
                 throw;
             }
         }
+        public async Task<int> InsertAsync(Format format, bool rollback = false)
+        {
+            try
+            {
+                tblFormat row = new tblFormat { Description = format.Description };
+                format.Id = row.Id;
+                return await InsertAsync(row, e => e.Description == format.Description, rollback);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
         public List<Format> Load()
         {
@@ -45,6 +60,31 @@ namespace DDB.DVDCentral.BL
                 throw;
             }
 
+        }
+
+        public async Task<List<Format>> LoadAsync()
+        {
+            try
+            {
+                List<Format> rows = new List<Format>();
+                (await base.LoadAsync())
+                    .OrderBy(d => d.SortField)
+                    .ToList()
+                    .ForEach(d => rows.Add(
+                        new Format
+                        {
+                            Id = d.Id,
+                            Description = d.Description,
+                        }));
+
+                return rows;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         public Format LoadById(Guid id)

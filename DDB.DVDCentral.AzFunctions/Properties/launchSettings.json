@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DDB.DVDCentral.AzFunctions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7182",
+      "launchBrowser": false
+    }
+  }
+}

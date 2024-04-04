@@ -1,0 +1,17 @@
+﻿<Window x:Class="DDB.DVDCentral.WPFUI.QrCode"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DDB.DVDCentral.WPFUI"
+        mc:Ignorable="d"
+        Title="QrCode" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="btnEncode" Content="Encode" HorizontalAlignment="Left" Margin="72,43,0,0" VerticalAlignment="Top" Height="29" Width="96" Click="btnEncode_Click"/>
+        <Button x:Name="btnDecode" Content="Decode" HorizontalAlignment="Left" Margin="72,77,0,0" VerticalAlignment="Top" Height="29" Width="96"/>
+        <Button x:Name="btnNavigate" Content="Navigate" HorizontalAlignment="Left" Margin="72,120,0,0" VerticalAlignment="Top" Height="28" Width="96"/>
+        <TextBox x:Name="txtInfo" HorizontalAlignment="Left" Margin="269,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400"/>
+        <Image x:Name="imgCode" HorizontalAlignment="Left" Height="164" Margin="269,134,0,0" VerticalAlignment="Top" Width="164"/>
+
+    </Grid>
+</Window>
